@@ -5,23 +5,39 @@
 """Date custom scalar type"""
 scalar DateScalar
 
+type Edge {
+  cursor: String
+  node: Memory
+}
+
 type Memory {
-  archived_at: DateScalar
+  archivedAt: DateScalar
   body: String
-  created_at: DateScalar
-  deleted_at: DateScalar
-  id: Int
-  last_edited_at: DateScalar
-  last_editor_id: String
-  memory_originated_at: DateScalar
-  published: Boolean
-  published_at: DateScalar
-  reflection_id: String
+  createdAt: DateScalar
+  deletedAt: DateScalar
+  editorId: String
+  id: String
+  imageUrl: String
+  isPublished: Boolean
+  lastEditedAt: DateScalar
+  memoryOriginatedAt: DateScalar
+  publishedAt: DateScalar
+  reflectionId: String
   story: String
   title: String
-  user_id: String
+  userId: String
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean
 }
 
 type Query {
-  drafts: [Memory]!
+  memories(after: String, first: Int): Response
+}
+
+type Response {
+  edges: [Edge]
+  pageInfo: PageInfo
 }
