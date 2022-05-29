@@ -2,13 +2,26 @@
 ### Do not make changes to this file directly
 
 
-type Post {
+"""Date custom scalar type"""
+scalar DateScalar
+
+type Memory {
+  archived_at: DateScalar
   body: String
+  created_at: DateScalar
+  deleted_at: DateScalar
   id: Int
+  last_edited_at: DateScalar
+  last_editor_id: String
+  memory_originated_at: DateScalar
   published: Boolean
+  published_at: DateScalar
+  reflection_id: String
+  story: String
   title: String
+  user_id: String
 }
 
 type Query {
-  drafts: [Post]!
+  drafts: [Memory]!
 }

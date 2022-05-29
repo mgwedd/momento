@@ -4,9 +4,23 @@
  */
 
 
-
-
-
+import type { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    /**
+     * Date custom scalar type
+     */
+    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateScalar";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * Date custom scalar type
+     */
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateScalar";
+  }
+}
 
 
 declare global {
@@ -25,14 +39,25 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  DateScalar: any
 }
 
 export interface NexusGenObjects {
-  Post: { // root type
+  Memory: { // root type
+    archived_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
     body?: string | null; // String
+    created_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deleted_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: number | null; // Int
+    last_edited_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    last_editor_id?: string | null; // String
+    memory_originated_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
     published?: boolean | null; // Boolean
+    published_at?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    reflection_id?: string | null; // String
+    story?: string | null; // String
     title?: string | null; // String
+    user_id?: string | null; // String
   }
   Query: {};
 }
@@ -48,26 +73,46 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Post: { // field return type
+  Memory: { // field return type
+    archived_at: NexusGenScalars['DateScalar'] | null; // DateScalar
     body: string | null; // String
+    created_at: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deleted_at: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: number | null; // Int
+    last_edited_at: NexusGenScalars['DateScalar'] | null; // DateScalar
+    last_editor_id: string | null; // String
+    memory_originated_at: NexusGenScalars['DateScalar'] | null; // DateScalar
     published: boolean | null; // Boolean
+    published_at: NexusGenScalars['DateScalar'] | null; // DateScalar
+    reflection_id: string | null; // String
+    story: string | null; // String
     title: string | null; // String
+    user_id: string | null; // String
   }
   Query: { // field return type
-    drafts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
+    drafts: Array<NexusGenRootTypes['Memory'] | null>; // [Memory]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Post: { // field return type name
+  Memory: { // field return type name
+    archived_at: 'DateScalar'
     body: 'String'
+    created_at: 'DateScalar'
+    deleted_at: 'DateScalar'
     id: 'Int'
+    last_edited_at: 'DateScalar'
+    last_editor_id: 'String'
+    memory_originated_at: 'DateScalar'
     published: 'Boolean'
+    published_at: 'DateScalar'
+    reflection_id: 'String'
+    story: 'String'
     title: 'String'
+    user_id: 'String'
   }
   Query: { // field return type name
-    drafts: 'Post'
+    drafts: 'Memory'
   }
 }
 
