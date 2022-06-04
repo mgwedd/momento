@@ -5,7 +5,7 @@
 
 
 import type { Context } from "./api/context"
-import type { core } from "nexus"
+import type { core, connectionPluginCore } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
@@ -20,6 +20,15 @@ declare global {
      * Date custom scalar type
      */
     date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateScalar";
+    /**
+     * Adds a Relay-style connection to the type, with numerous options for configuration
+     *
+     * @see https://nexusjs.org/docs/plugins/connection
+     */
+    connectionField<FieldName extends string>(
+      fieldName: FieldName,
+      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>
+    ): void
   }
 }
 
@@ -44,131 +53,210 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Edge: { // root type
-    cursor?: string | null; // String
-    node?: NexusGenRootTypes['Memory'] | null; // Memory
-  }
   Memory: { // root type
     archivedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     body?: string | null; // String
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    creator?: NexusGenRootTypes['User'] | null; // User
+    deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    editor?: NexusGenRootTypes['User'] | null; // User
+    id?: string | null; // String
+    imageUrl?: string | null; // String
+    lastEditedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    memoryOriginatedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    reflection?: NexusGenRootTypes['Reflection'] | null; // Reflection
+    story?: string | null; // String
+    title?: string | null; // String
+  }
+  MemoryConnection: { // root type
+    edges?: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  MemoryEdge: { // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Memory'] | null; // Memory
+  }
+  Mutation: {};
+  PageInfo: { // root type
+    endCursor?: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor?: string | null; // String
+  }
+  Query: {};
+  Reflection: { // root type
+    archivedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     editorId?: string | null; // String
     id?: string | null; // String
-    imageUrl?: string | null; // String
-    isPublished?: boolean | null; // Boolean
     lastEditedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
-    memoryOriginatedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
-    publishedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
-    reflectionId?: string | null; // String
-    story?: string | null; // String
-    title?: string | null; // String
-    userId?: string | null; // String
+    prompt?: string | null; // String
   }
-  PageInfo: { // root type
-    endCursor?: string | null; // String
-    hasNextPage?: boolean | null; // Boolean
-  }
-  Query: {};
-  Response: { // root type
-    edges?: Array<NexusGenRootTypes['Edge'] | null> | null; // [Edge]
-    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  User: { // root type
+    email?: string | null; // String
+    firstName?: string | null; // String
+    id?: string | null; // String
+    lastName?: string | null; // String
   }
 }
 
 export interface NexusGenInterfaces {
+  Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['Reflection'];
 }
 
 export interface NexusGenUnions {
 }
 
-export type NexusGenRootTypes = NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Edge: { // field return type
-    cursor: string | null; // String
-    node: NexusGenRootTypes['Memory'] | null; // Memory
-  }
   Memory: { // field return type
     archivedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     body: string | null; // String
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    creator: NexusGenRootTypes['User'] | null; // User
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
-    editorId: string | null; // String
+    editor: NexusGenRootTypes['User'] | null; // User
     id: string | null; // String
     imageUrl: string | null; // String
-    isPublished: boolean | null; // Boolean
     lastEditedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     memoryOriginatedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
-    publishedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
-    reflectionId: string | null; // String
+    reflection: NexusGenRootTypes['Reflection'] | null; // Reflection
     story: string | null; // String
     title: string | null; // String
-    userId: string | null; // String
+  }
+  MemoryConnection: { // field return type
+    edges: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  MemoryEdge: { // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Memory'] | null; // Memory
+  }
+  Mutation: { // field return type
+    editMemory: NexusGenRootTypes['Memory']; // Memory!
   }
   PageInfo: { // field return type
     endCursor: string | null; // String
-    hasNextPage: boolean | null; // Boolean
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor: string | null; // String
   }
   Query: { // field return type
-    memories: NexusGenRootTypes['Response'] | null; // Response
+    memory: NexusGenRootTypes['Memory'] | null; // Memory
+    memoryConnection: NexusGenRootTypes['MemoryConnection'] | null; // MemoryConnection
   }
-  Response: { // field return type
-    edges: Array<NexusGenRootTypes['Edge'] | null> | null; // [Edge]
-    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  Reflection: { // field return type
+    archivedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    editorId: string | null; // String
+    id: string | null; // String
+    lastEditedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    prompt: string | null; // String
+  }
+  User: { // field return type
+    email: string | null; // String
+    firstName: string | null; // String
+    id: string | null; // String
+    lastName: string | null; // String
+  }
+  Node: { // field return type
+    id: string | null; // String
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Edge: { // field return type name
-    cursor: 'String'
-    node: 'Memory'
-  }
   Memory: { // field return type name
     archivedAt: 'DateScalar'
     body: 'String'
     createdAt: 'DateScalar'
+    creator: 'User'
     deletedAt: 'DateScalar'
-    editorId: 'String'
+    editor: 'User'
     id: 'String'
     imageUrl: 'String'
-    isPublished: 'Boolean'
     lastEditedAt: 'DateScalar'
     memoryOriginatedAt: 'DateScalar'
-    publishedAt: 'DateScalar'
-    reflectionId: 'String'
+    reflection: 'Reflection'
     story: 'String'
     title: 'String'
-    userId: 'String'
+  }
+  MemoryConnection: { // field return type name
+    edges: 'MemoryEdge'
+    pageInfo: 'PageInfo'
+  }
+  MemoryEdge: { // field return type name
+    cursor: 'String'
+    node: 'Memory'
+  }
+  Mutation: { // field return type name
+    editMemory: 'Memory'
   }
   PageInfo: { // field return type name
     endCursor: 'String'
     hasNextPage: 'Boolean'
+    hasPreviousPage: 'Boolean'
+    startCursor: 'String'
   }
   Query: { // field return type name
-    memories: 'Response'
+    memory: 'Memory'
+    memoryConnection: 'MemoryConnection'
   }
-  Response: { // field return type name
-    edges: 'Edge'
-    pageInfo: 'PageInfo'
+  Reflection: { // field return type name
+    archivedAt: 'DateScalar'
+    createdAt: 'DateScalar'
+    deletedAt: 'DateScalar'
+    editorId: 'String'
+    id: 'String'
+    lastEditedAt: 'DateScalar'
+    prompt: 'String'
+  }
+  User: { // field return type name
+    email: 'String'
+    firstName: 'String'
+    id: 'String'
+    lastName: 'String'
+  }
+  Node: { // field return type name
+    id: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    editMemory: { // args
+      body: string; // String!
+      id: string; // String!
+      memoryOriginatedAt: number; // Int!
+      story: string; // String!
+      title: string; // String!
+      userId: string; // String!
+    }
+  }
   Query: {
-    memories: { // args
+    memory: { // args
+      id: string; // String!
+    }
+    memoryConnection: { // args
       after?: string | null; // String
+      before?: string | null; // String
       first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
 }
 
 export interface NexusGenAbstractTypeMembers {
+  Node: "Memory" | "Reflection"
 }
 
 export interface NexusGenTypeInterfaces {
+  Memory: "Node"
+  Reflection: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -177,7 +265,7 @@ export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = never;
 
-export type NexusGenInterfaceNames = never;
+export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -185,7 +273,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = never;
+export type NexusGenAbstractsUsingStrategyResolveType = "Node";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
@@ -228,6 +316,7 @@ declare global {
   interface NexusGenPluginInputTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+    
   }
   interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
   }

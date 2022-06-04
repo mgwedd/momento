@@ -1,9 +1,11 @@
-import { objectType, extendType, stringArg, intArg } from 'nexus'
+import { interfaceType } from 'nexus'
 
-export const Node = objectType({
+export const Node = interfaceType({
     name: 'Node',
+    description: 'The GUID of the node',
     definition(t) {
         t.string('id')
-    }
+    },
+    resolveType: (_) => null
 })
   

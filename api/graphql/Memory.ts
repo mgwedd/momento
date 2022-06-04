@@ -1,123 +1,48 @@
-import { objectType, extendType, stringArg, intArg, nonNull } from 'nexus'
+import {  objectType, extendType, stringArg, intArg, nonNull } from 'nexus'
 
 export const Memory = objectType({
-  name: 'Memory',          
+  name: 'Memory',    
+  description: "Represents a memory of the subject (origin) of grief",      
   definition(t) {
-    t.string('id')
-    t.string('userId')
-    t.string('reflectionId')
-    t.string('editorId')
-    t.string('story')
-    t.string('title')      
-    t.string('body')
-    t.string('imageUrl')
-    t.date('memoryOriginatedAt')
-    t.date('createdAt')
-    t.date('lastEditedAt')
-    t.date('archivedAt') 
-    t.date('deletedAt')                     
+    // TODO extend base Node type for all objects
+    t.implements('Node');
+    t.field('creator', { type: 'User', description: 'The user that created and owns the Memory'})
+    t.field('reflection', { type: 'Reflection', description: 'The Reflection (if any) that prompted this Memory' })
+    t.field('editor', { type: 'User', description: 'The last user to edit the Memory'})
+    t.string('title', { description: 'The title of the memory'})      
+    t.string('story', { description: 'The story attached to the memory'})
+    t.string('body', { description: 'The body text of the memory' })
+    t.string('imageUrl', { description: 'The image URL (cdn) of the primary image of the memory, to be later expanded into multimedia fields'})
+    t.date('memoryOriginatedAt', { description: 'When the memory originated in the creator\'s life'})
+    t.date('createdAt', { description: 'When the memory was created on momento'})
+    t.date('lastEditedAt', { description: 'When the memory was last edited'})
+    t.date('archivedAt', { description: 'When the memory was archived'}) 
+    t.date('deletedAt', { description: 'When the memory was deleted'})                     
   },
 })
-
-export const Edge = objectType({ 
-  name: 'Edge',
-  definition(t) {
-    t.string('cursor'),
-    t.field('node', { 
-      type: Memory
-    })
-  }
-})
-
-export const PageInfo = objectType({ 
-  name: 'PageInfo', 
-  definition(t) {
-    t.string('endCursor')
-    t.boolean('hasNextPage')
-  }
-})
-
-export const Response = objectType({
-  name: 'Response',
-  definition(t) {
-    t.field('pageInfo', { type: PageInfo }),
-    t.list.field('edges', { 
-      type: Edge
-    })
-  }
-})
-
-// client sends a request. 
-// This be either be the first req, send another req, which will contain a cursor
 
 export const MemoryQuery = extendType({
   type: 'Query',                        
   definition(t) {
-    t.field('memories', {
-      type: 'Response', 
+    t.field('memory', { 
+      type: 'Memory',
+      description: 'A single memory',
       args: {
-        first: intArg(),
-        after: stringArg()
+        id: nonNull(stringArg())
       },
-      async resolve(_, args, ctx) {
-        let queryResults = null
-        if (args.after) {
-          // check if there is a cursor as the argument
-          queryResults = ctx.db.memories.findMany({
-            take: args.first, // the number of items to return from the db
-            skip: 1, // skip the cursor itself
-            cursor: {
-              id: args.after // the cursor
-            }
-          })
-        } else {
-          // if no cursor, this means that this is the first request
-          // we wil return the first items in the db
-          queryResults = await ctx.db.memories.findMany({
-            take: args.first,
-          })
-        }
+      resolve: (_, args, ctx) => {
+        return ctx.db.memory.findUnique({ where: { id: args.id } })
+      },
+    })
 
-        if (queryResults.length < 1) {
-          // no results found
-          return {
-            pageInfo: { 
-              endCursor: null, 
-              hasNextPage: false, 
-              edges: []
-            }
-          }
-        }
-
-        // the query has returned memories, so figure out the page info (more pages?) and return results
-
-        // get the last element in the previous result set
-        const lastMemoriesInResults = queryResults[queryResults.length - 1]
-        // cursor we'll return in subsequent requests
-        const { id : newCursor } = lastMemoriesInResults
-        // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.db.memories.findMany({ 
-          take: args.first, 
-          cursor: { 
-            id: newCursor
-          }
-        })
-
-        // return the response of the initial query
-        const result =  {
-          pageInfo: { 
-            endCursor: newCursor, 
-            // we have a next page if the number of items is greater than the response of the second query
-            hasNextPage: secondQueryResults.length > args.first
-          },
-          edges: queryResults.map( (memory: { id: string }) => ({
-            cursor: memory.id, 
-            node: memory
-          }))
-        }
-
-        return result
-      }
+    t.connectionField('memoryConnection', {
+      type: 'Memory',
+      nodes(_, args, ctx) {
+        return ctx.db.memory.findMany()
+      },
+      // totalCount(_, args, ctx) {
+      //   return ctx.db.memory.count()
+      // },
     })
   }
 })
@@ -149,7 +74,7 @@ export const MemoryMutation = extendType({
           createdAt: Date.now(), 
         }
 
-        ctx.db.memories.update({ memory })
+        ctx.db.memory.update({ select: memory })
         return memory
       },
     })
