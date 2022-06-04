@@ -1,1 +1,1 @@
-info about this project
+THe Momento API Server prototype
