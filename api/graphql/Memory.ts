@@ -11,10 +11,8 @@ export const Memory = objectType({
     t.string('title')      
     t.string('body')
     t.string('imageUrl')
-    t.boolean('isPublished')
     t.date('memoryOriginatedAt')
     t.date('createdAt')
-    t.date('publishedAt')
     t.date('lastEditedAt')
     t.date('archivedAt') 
     t.date('deletedAt')                     
@@ -119,29 +117,6 @@ export const MemoryQuery = extendType({
         }
 
         return result
-
-
-        // return {
-        //   edges: [
-        //     { 
-        //       cursor: '', 
-        //       node: {
-        //         id: '1asd',
-        //         title: 'Origin Memory',
-        //         body: '...', 
-        //         isPublished: false,
-        //         userId: 'abc123',
-        //         story: 'my story',
-        //         memoryOriginatedAt: new Date(), 
-        //         createdAt: new Date()
-        //       }
-        //     }
-        //   ],
-        //   pageInfo: { 
-        //     endCursor: '',
-        //     hasNextPage: false
-        //   }
-        // }
       }
     })
   }
@@ -174,10 +149,10 @@ export const MemoryMutation = extendType({
           createdAt: Date.now(), 
         }
 
-        ctx.db.memories[id] = memory
+        ctx.db.memories.update({ memory })
         return memory
       },
-    }),
+    })
     // t.nonNull.field('publishMemory', {
     //   type: 'Memory',
     //   args: {
@@ -195,5 +170,5 @@ export const MemoryMutation = extendType({
     //   }
 
     // })
-  },
+  }
 })
