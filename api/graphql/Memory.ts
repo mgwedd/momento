@@ -1,4 +1,4 @@
-import { objectType, extendType, stringArg, intArg } from 'nexus'
+import { objectType, extendType, stringArg, intArg, nonNull } from 'nexus'
 
 export const Memory = objectType({
   name: 'Memory',          
@@ -65,7 +65,7 @@ export const MemoryQuery = extendType({
         let queryResults = null
         if (args.after) {
           // check if there is a cursor as the argument
-          queryResults = ctx.prisma.link.findMany({
+          queryResults = ctx.db.memories.findMany({
             take: args.first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
@@ -75,7 +75,7 @@ export const MemoryQuery = extendType({
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
-          queryResults = await ctx.prisma.link.findMany({
+          queryResults = await ctx.db.memories.findMany({
             take: args.first,
           })
         }
@@ -98,7 +98,7 @@ export const MemoryQuery = extendType({
         // cursor we'll return in subsequent requests
         const { id : newCursor } = lastMemoriesInResults
         // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.prisma.link.findMany({ 
+        const secondQueryResults = await ctx.db.memories.findMany({ 
           take: args.first, 
           cursor: { 
             id: newCursor
@@ -112,7 +112,7 @@ export const MemoryQuery = extendType({
             // we have a next page if the number of items is greater than the response of the second query
             hasNextPage: secondQueryResults.length > args.first
           },
-          edges: queryResults.map( memory => ({
+          edges: queryResults.map( (memory: { id: string }) => ({
             cursor: memory.id, 
             node: memory
           }))
@@ -149,25 +149,51 @@ export const MemoryQuery = extendType({
 
 
 
-// export const MemoryMutation = extendType({
-//   type: 'Mutation',
-//   definition(t) {
-//     t.nonNull.field('createDraftMemory', {
-//       type: 'Memory',
-//       args: {                                      
-//         title: nonNull(stringArg()),               
-//         body: nonNull(stringArg()),                  
-//       },
-//       resolve(_root, args, ctx) {
-//         const draft = {
-//           id: ctx.db.memories.length + 1,
-//           title: args.title,                        
-//           body: args.body,                        
-//           published: false,
-//         }
-//         ctx.db.memories.push(draft)
-//         return draft
-//       },
-//     })
-//   },
-// })
+export const MemoryMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.nonNull.field('editMemory', {
+      type: 'Memory',
+      args: {  
+        id: nonNull(stringArg()),                                    
+        title: nonNull(stringArg()),               
+        body: nonNull(stringArg()),
+        story: nonNull(stringArg()), 
+        userId: nonNull(stringArg()), 
+        memoryOriginatedAt: nonNull(intArg()), 
+      },
+      resolve(_root, args, ctx) {
+        const { id, title, body, userId, story, memoryOriginatedAt } = args;
+        const memory = {
+          id,
+          title,                        
+          body,                        
+          userId, 
+          story, 
+          memoryOriginatedAt,
+          createdAt: Date.now(), 
+        }
+
+        ctx.db.memories[id] = memory
+        return memory
+      },
+    }),
+    // t.nonNull.field('publishMemory', {
+    //   type: 'Memory',
+    //   args: {
+    //     draftId: nonNull(stringArg())
+    //   },
+    //   resolve(_root, args, ctx) {
+    //     let draftToPublish = ctx.db.memories.find(memory => memory.id === args.draftId)
+    //     if (!draftToPublish) {
+    //       throw new Error(`Could not find draft with id ${args.draftId}`)
+    //     }
+
+    //     draftToPublish.isPublished = true
+
+    //     return draftToPublish
+    //   }
+
+    // })
+  },
+})
