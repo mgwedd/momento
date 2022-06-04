@@ -16,29 +16,14 @@ type Memory implements Node {
   """When the memory was created on momento"""
   createdAt: DateScalar
 
-  """The user that created and owns the Memory"""
-  creator: User
-
   """When the memory was deleted"""
   deletedAt: DateScalar
-
-  """The last user to edit the Memory"""
-  editor: User
   id: String
 
   """
   The image URL (cdn) of the primary image of the memory, to be later expanded into multimedia fields
   """
   imageUrl: String
-
-  """When the memory was last edited"""
-  lastEditedAt: DateScalar
-
-  """When the memory originated in the creator's life"""
-  memoryOriginatedAt: DateScalar
-
-  """The Reflection (if any) that prompted this Memory"""
-  reflection: Reflection
 
   """The story attached to the memory"""
   story: String
@@ -57,6 +42,7 @@ type MemoryConnection {
   https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
   """
   pageInfo: PageInfo!
+  totalCount: Int
 }
 
 type MemoryEdge {
@@ -68,7 +54,8 @@ type MemoryEdge {
 }
 
 type Mutation {
-  editMemory(body: String!, id: String!, memoryOriginatedAt: Int!, story: String!, title: String!, userId: String!): Memory!
+  createMemory(body: String!, story: String!, title: String!): Memory!
+  editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
 }
 
 """The GUID of the node"""
@@ -120,12 +107,9 @@ type Query {
 }
 
 type Reflection implements Node {
-  archivedAt: DateScalar
   createdAt: DateScalar
   deletedAt: DateScalar
-  editorId: String
   id: String
-  lastEditedAt: DateScalar
   prompt: String
 }
 

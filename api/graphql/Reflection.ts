@@ -6,9 +6,10 @@ export const Reflection = objectType({
       t.implements('Node');
       t.string('prompt')
       t.date('createdAt')
-      t.string('editorId')
-      t.date('lastEditedAt')
-      t.date('archivedAt') 
-      t.date('deletedAt') 
+      t.date('deletedAt')
+      // t.field('memory', { type: 'Memory', description: 'The memory that this reflection spawned'}) 
+      // t.string('editorId')
+      // t.date('lastEditedAt')
+      // t.date('archivedAt') 
     }
   })

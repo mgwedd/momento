@@ -15,12 +15,27 @@ model Memory {
   title                   String
   body                    String
   story                   String
-  userId                  String
-  reflectionId            String 
-  editorId                String
-  imageUrl                String 
-  memoryOriginatedAt      DateTime 
-  createdAt               DateTime 
-  archivedAt              DateTime 
-  deletedAt               DateTime 
+  imageUrl                String? 
+  memoryOriginatedAt      DateTime? 
+  createdAt               DateTime? 
+  deletedAt               DateTime? 
+  // authorId                String 
+  // author                  User       @relation(fields: [authorId], references: [id])
+  // reflection              Reflection  @relation(fields: [id], references: [id])
 }
+
+
+// model Reflection { 
+//   id                      String     @id @default(auto()) @map("_id") @db.ObjectId
+//   prompt                  String 
+//   createdAt               DateTime
+//   deletedAt               DateTime?
+//   memoryId                String @db.ObjectId()
+//   memory                  Memory  @relation(fields: [id], references: [id])
+// }
+
+
+// model User {
+//   id            String @id @default(auto()) @map("_id") @db.ObjectId
+//   memories      Memory[]
+// }

@@ -14,6 +14,10 @@ export const schema = makeSchema({
   },
   plugins: [
     // relay-spec-compliant pagination
-    connectionPlugin() 
+    connectionPlugin({
+      extendConnection: {
+        totalCount: { type: 'Int' },
+      },
+    }) 
   ]
 })
