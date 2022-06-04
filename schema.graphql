@@ -5,11 +5,13 @@
 """Date custom scalar type"""
 scalar DateScalar
 
+type Edge {
+  cursor: String
+  node: User
+}
+
 """Represents a memory of the subject (origin) of grief"""
 type Memory implements Node {
-  """When the memory was archived"""
-  archivedAt: DateScalar
-
   """The body text of the memory"""
   body: String
 
@@ -20,11 +22,6 @@ type Memory implements Node {
   deletedAt: DateScalar
   id: String
 
-  """
-  The image URL (cdn) of the primary image of the memory, to be later expanded into multimedia fields
-  """
-  imageUrl: String
-
   """The story attached to the memory"""
   story: String
 
@@ -32,30 +29,8 @@ type Memory implements Node {
   title: String
 }
 
-type MemoryConnection {
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-  """
-  edges: [MemoryEdge]
-
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-  """
-  pageInfo: PageInfo!
-  totalCount: Int
-}
-
-type MemoryEdge {
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
-  cursor: String!
-
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
-  node: Memory
-}
-
 type Mutation {
-  createMemory(body: String!, story: String!, title: String!): Memory!
-  editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
+  createUser(email: String!, firstName: String!, lastName: String!): User
 }
 
 """The GUID of the node"""
@@ -63,47 +38,18 @@ interface Node {
   id: String
 }
 
-"""
-PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-"""
 type PageInfo {
-  """
-  The cursor corresponding to the last nodes in edges. Null if the connection is empty.
-  """
   endCursor: String
-
-  """
-  Used to indicate whether more edges exist following the set defined by the clients arguments.
-  """
-  hasNextPage: Boolean!
-
-  """
-  Used to indicate whether more edges exist prior to the set defined by the clients arguments.
-  """
-  hasPreviousPage: Boolean!
-
-  """
-  The cursor corresponding to the first nodes in edges. Null if the connection is empty.
-  """
-  startCursor: String
+  hasNextPage: Boolean
 }
 
 type Query {
   """A single memory"""
   memory(id: String!): Memory
-  memoryConnection(
-    """Returns the elements in the list that come after the specified cursor"""
-    after: String
 
-    """Returns the elements in the list that come before the specified cursor"""
-    before: String
-
-    """Returns the first n elements from the list."""
-    first: Int
-
-    """Returns the last n elements from the list."""
-    last: Int
-  ): MemoryConnection
+  """A single user"""
+  user(id: String!): User
+  userConnection(after: String, first: Int!): Response
 }
 
 type Reflection implements Node {
@@ -113,7 +59,12 @@ type Reflection implements Node {
   prompt: String
 }
 
-type User {
+type Response {
+  edges: [Edge]
+  pageInfo: PageInfo
+}
+
+type User implements Node {
   email: String
   firstName: String
   id: String

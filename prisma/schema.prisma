@@ -15,10 +15,10 @@ model Memory {
   title                   String
   body                    String
   story                   String
-  imageUrl                String? 
-  memoryOriginatedAt      DateTime? 
   createdAt               DateTime? 
   deletedAt               DateTime? 
+  // memoryOriginatedAt      DateTime? 
+  // imageUrl                String? 
   // authorId                String 
   // author                  User       @relation(fields: [authorId], references: [id])
   // reflection              Reflection  @relation(fields: [id], references: [id])
@@ -35,7 +35,9 @@ model Memory {
 // }
 
 
-// model User {
-//   id            String @id @default(auto()) @map("_id") @db.ObjectId
-//   memories      Memory[]
-// }
+model User {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  firstName     String 
+  lastName      String 
+  email         String 
+}
