@@ -17,23 +17,7 @@ model Memory {
   story                   String
   createdAt               DateTime? 
   deletedAt               DateTime? 
-  // memoryOriginatedAt      DateTime? 
-  // imageUrl                String? 
-  // authorId                String 
-  // author                  User       @relation(fields: [authorId], references: [id])
-  // reflection              Reflection  @relation(fields: [id], references: [id])
 }
-
-
-// model Reflection { 
-//   id                      String     @id @default(auto()) @map("_id") @db.ObjectId
-//   prompt                  String 
-//   createdAt               DateTime
-//   deletedAt               DateTime?
-//   memoryId                String @db.ObjectId()
-//   memory                  Memory  @relation(fields: [id], references: [id])
-// }
-
 
 model User {
   id            String @id @default(auto()) @map("_id") @db.ObjectId

@@ -30,7 +30,11 @@ type Memory implements Node {
 }
 
 type Mutation {
+  createMemory(body: String!, story: String!, title: String!): Memory!
   createUser(email: String!, firstName: String!, lastName: String!): User
+  deleteUser(id: String!): User
+  editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
+  editUser(email: String, firstName: String, id: String!, lastName: String): User
 }
 
 """The GUID of the node"""
@@ -46,6 +50,7 @@ type PageInfo {
 type Query {
   """A single memory"""
   memory(id: String!): Memory
+  memoryConnection(after: String, first: Int!): Response
 
   """A single user"""
   user(id: String!): User

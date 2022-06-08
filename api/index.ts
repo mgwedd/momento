@@ -1,5 +1,6 @@
-import { server } from './server'
+import { server } from './server';
 
 server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
-})
+  // tslint:disable-next-line: no-console
+  console.log(`🚀 Server ready at ${url}`);
+});

@@ -105,7 +105,11 @@ export interface NexusGenFieldTypes {
     title: string | null; // String
   }
   Mutation: { // field return type
+    createMemory: NexusGenRootTypes['Memory']; // Memory!
     createUser: NexusGenRootTypes['User'] | null; // User
+    deleteUser: NexusGenRootTypes['User'] | null; // User
+    editMemory: NexusGenRootTypes['Memory']; // Memory!
+    editUser: NexusGenRootTypes['User'] | null; // User
   }
   PageInfo: { // field return type
     endCursor: string | null; // String
@@ -113,6 +117,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     memory: NexusGenRootTypes['Memory'] | null; // Memory
+    memoryConnection: NexusGenRootTypes['Response'] | null; // Response
     user: NexusGenRootTypes['User'] | null; // User
     userConnection: NexusGenRootTypes['Response'] | null; // Response
   }
@@ -151,7 +156,11 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
   }
   Mutation: { // field return type name
+    createMemory: 'Memory'
     createUser: 'User'
+    deleteUser: 'User'
+    editMemory: 'Memory'
+    editUser: 'User'
   }
   PageInfo: { // field return type name
     endCursor: 'String'
@@ -159,6 +168,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     memory: 'Memory'
+    memoryConnection: 'Response'
     user: 'User'
     userConnection: 'Response'
   }
@@ -185,15 +195,39 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createMemory: { // args
+      body: string; // String!
+      story: string; // String!
+      title: string; // String!
+    }
     createUser: { // args
       email: string; // String!
       firstName: string; // String!
       lastName: string; // String!
     }
+    deleteUser: { // args
+      id: string; // String!
+    }
+    editMemory: { // args
+      body: string; // String!
+      id: string; // String!
+      story: string; // String!
+      title: string; // String!
+    }
+    editUser: { // args
+      email?: string | null; // String
+      firstName?: string | null; // String
+      id: string; // String!
+      lastName?: string | null; // String
+    }
   }
   Query: {
     memory: { // args
       id: string; // String!
+    }
+    memoryConnection: { // args
+      after?: string | null; // String
+      first: number; // Int!
     }
     user: { // args
       id: string; // String!
