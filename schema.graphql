@@ -5,27 +5,56 @@
 """Date custom scalar type"""
 scalar DateScalar
 
-type Edge {
+"""The base definition of a relay-style edge"""
+interface Edge {
+  cursor: String
+}
+
+"""Represents a memory of the subject (origin) of grief"""
+type Memory implements Node {
+  """The body text of the memory"""
+  body: String
+
+  """When the memory was created on momento"""
+  createdAt: DateScalar
+
+  """When the memory was deleted"""
+  deletedAt: DateScalar
+  id: String
+
+  """The owner (generally also the creator) of the memory"""
+  owner: User
+
+  """The story attached to the memory"""
+  story: String
+
+  """The title of the memory"""
+  title: String
+}
+
+type MemoryConnectionEdge implements Edge {
   cursor: String
   node: Memory
 }
 
-type Memory {
-  archivedAt: DateScalar
-  body: String
-  createdAt: DateScalar
-  deletedAt: DateScalar
-  editorId: String
+type MemoryConnectionResponse {
+  edges: [MemoryConnectionEdge]
+  pageInfo: PageInfo
+}
+
+type Mutation {
+  createMemory(body: String!, story: String!, title: String!): Memory!
+  createSite(owner: String!, title: String!): Site!
+  createUser(email: String!, firstName: String!, lastName: String!): User
+  deleteUser(id: String!): User
+  editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
+  editSite(id: String!, title: String!): Site!
+  editUser(email: String!, firstName: String!, id: String!, lastName: String!): User
+}
+
+"""The GUID of the node"""
+interface Node {
   id: String
-  imageUrl: String
-  isPublished: Boolean
-  lastEditedAt: DateScalar
-  memoryOriginatedAt: DateScalar
-  publishedAt: DateScalar
-  reflectionId: String
-  story: String
-  title: String
-  userId: String
 }
 
 type PageInfo {
@@ -34,10 +63,69 @@ type PageInfo {
 }
 
 type Query {
-  memories(after: String, first: Int): Response
+  """A single memory"""
+  memory(id: String!): Memory
+
+  """A relay-style connection to paginated memories"""
+  memoryConnection(after: String, first: Int!): MemoryConnectionResponse
+
+  """A single site"""
+  site(id: String!): Site
+
+  """A relay-style connection to paginated sites"""
+  siteConnection(after: String, first: Int!): SiteConnectionResponse
+
+  """A single user"""
+  user(id: String!): User
+
+  """A relay-style connection to paginated users"""
+  userConnection(after: String, first: Int!): UserConnectionResponse
+
+  """A single user"""
+  users(id: String!): User
 }
 
-type Response {
-  edges: [Edge]
+"""Represents a momento site for grieving someone or something"""
+type Site implements Node {
+  """When the site was created on momento"""
+  createdAt: DateScalar
+
+  """When the site was deleted"""
+  deletedAt: DateScalar
+  id: String
+
+  """The owner of the site"""
+  owner: User
+
+  """The title of the site"""
+  title: String
+}
+
+type SiteConnectionEdge implements Edge {
+  cursor: String
+  node: Site
+}
+
+type SiteConnectionResponse {
+  edges: [SiteConnectionEdge]
+  pageInfo: PageInfo
+}
+
+type User implements Node {
+  createdAt: DateScalar
+  deletedAt: DateScalar
+  email: String
+  firstName: String
+  id: String
+  lastName: String
+}
+
+type UserConnectionEdge implements Edge {
+  cursor: String
+  node: User
+}
+
+type UserConnectionResponse {
+  edges: [UserConnectionEdge]
   pageInfo: PageInfo
 }
