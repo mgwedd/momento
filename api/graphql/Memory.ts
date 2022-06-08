@@ -37,7 +37,7 @@ export const MemoryQuery = extendType({
       }
     });
     t.field('memoryConnection', {
-      type: 'Response',
+      type: 'MemoryResponse',
       args: {
         first: nonNull(intArg()),
         after: stringArg()
@@ -142,6 +142,26 @@ export const MemoryMutation = extendType({
         const mem = await ctx.db.memory.create({ data: memory });
         return mem;
       }
+    });
+  }
+});
+
+export const MemoryEdge = objectType({
+  name: 'MemoryEdge',
+  definition(t) {
+    t.implements('Edge')
+    t.field('node', {
+      type: Memory
+    });
+  }
+});
+
+export const MemoryResponse = objectType({
+  name: 'MemoryResponse',
+  definition(t) {
+    t.field('pageInfo', { type: 'PageInfo' })
+    t.list.field('edges', {
+      type: MemoryEdge
     });
   }
 });

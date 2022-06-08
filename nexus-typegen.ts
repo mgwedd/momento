@@ -44,10 +44,6 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Edge: { // root type
-    cursor?: string | null; // String
-    node?: NexusGenRootTypes['User'] | null; // User
-  }
   Memory: { // root type
     body?: string | null; // String
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
@@ -56,32 +52,39 @@ export interface NexusGenObjects {
     story?: string | null; // String
     title?: string | null; // String
   }
+  MemoryEdge: { // root type
+    cursor?: string | null; // String
+    node?: NexusGenRootTypes['Memory'] | null; // Memory
+  }
+  MemoryResponse: { // root type
+    edges?: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
   Mutation: {};
   PageInfo: { // root type
     endCursor?: string | null; // String
     hasNextPage?: boolean | null; // Boolean
   }
   Query: {};
-  Reflection: { // root type
-    createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
-    deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
-    id?: string | null; // String
-    prompt?: string | null; // String
-  }
-  Response: { // root type
-    edges?: Array<NexusGenRootTypes['Edge'] | null> | null; // [Edge]
-    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
-  }
   User: { // root type
     email?: string | null; // String
     firstName?: string | null; // String
     id?: string | null; // String
     lastName?: string | null; // String
   }
+  UserEdge: { // root type
+    cursor?: string | null; // String
+    node?: NexusGenRootTypes['User'] | null; // User
+  }
+  UserResponse: { // root type
+    edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['Reflection'] | NexusGenRootTypes['User'];
+  Edge: NexusGenRootTypes['MemoryEdge'] | NexusGenRootTypes['UserEdge'];
+  Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -92,10 +95,6 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Edge: { // field return type
-    cursor: string | null; // String
-    node: NexusGenRootTypes['User'] | null; // User
-  }
   Memory: { // field return type
     body: string | null; // String
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
@@ -103,6 +102,14 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     story: string | null; // String
     title: string | null; // String
+  }
+  MemoryEdge: { // field return type
+    cursor: string | null; // String
+    node: NexusGenRootTypes['Memory'] | null; // Memory
+  }
+  MemoryResponse: { // field return type
+    edges: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   Mutation: { // field return type
     createMemory: NexusGenRootTypes['Memory']; // Memory!
@@ -117,19 +124,10 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     memory: NexusGenRootTypes['Memory'] | null; // Memory
-    memoryConnection: NexusGenRootTypes['Response'] | null; // Response
+    memoryConnection: NexusGenRootTypes['MemoryResponse'] | null; // MemoryResponse
     user: NexusGenRootTypes['User'] | null; // User
-    userConnection: NexusGenRootTypes['Response'] | null; // Response
-  }
-  Reflection: { // field return type
-    createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
-    deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
-    id: string | null; // String
-    prompt: string | null; // String
-  }
-  Response: { // field return type
-    edges: Array<NexusGenRootTypes['Edge'] | null> | null; // [Edge]
-    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+    userConnection: NexusGenRootTypes['UserResponse'] | null; // UserResponse
+    users: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
     email: string | null; // String
@@ -137,16 +135,23 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     lastName: string | null; // String
   }
+  UserEdge: { // field return type
+    cursor: string | null; // String
+    node: NexusGenRootTypes['User'] | null; // User
+  }
+  UserResponse: { // field return type
+    edges: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
+  Edge: { // field return type
+    cursor: string | null; // String
+  }
   Node: { // field return type
     id: string | null; // String
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Edge: { // field return type name
-    cursor: 'String'
-    node: 'User'
-  }
   Memory: { // field return type name
     body: 'String'
     createdAt: 'DateScalar'
@@ -154,6 +159,14 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     story: 'String'
     title: 'String'
+  }
+  MemoryEdge: { // field return type name
+    cursor: 'String'
+    node: 'Memory'
+  }
+  MemoryResponse: { // field return type name
+    edges: 'MemoryEdge'
+    pageInfo: 'PageInfo'
   }
   Mutation: { // field return type name
     createMemory: 'Memory'
@@ -168,25 +181,27 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     memory: 'Memory'
-    memoryConnection: 'Response'
+    memoryConnection: 'MemoryResponse'
     user: 'User'
-    userConnection: 'Response'
-  }
-  Reflection: { // field return type name
-    createdAt: 'DateScalar'
-    deletedAt: 'DateScalar'
-    id: 'String'
-    prompt: 'String'
-  }
-  Response: { // field return type name
-    edges: 'Edge'
-    pageInfo: 'PageInfo'
+    userConnection: 'UserResponse'
+    users: 'User'
   }
   User: { // field return type name
     email: 'String'
     firstName: 'String'
     id: 'String'
     lastName: 'String'
+  }
+  UserEdge: { // field return type name
+    cursor: 'String'
+    node: 'User'
+  }
+  UserResponse: { // field return type name
+    edges: 'UserEdge'
+    pageInfo: 'PageInfo'
+  }
+  Edge: { // field return type name
+    cursor: 'String'
   }
   Node: { // field return type name
     id: 'String'
@@ -215,10 +230,10 @@ export interface NexusGenArgTypes {
       title: string; // String!
     }
     editUser: { // args
-      email?: string | null; // String
-      firstName?: string | null; // String
+      email: string; // String!
+      firstName: string; // String!
       id: string; // String!
-      lastName?: string | null; // String
+      lastName: string; // String!
     }
   }
   Query: {
@@ -236,17 +251,22 @@ export interface NexusGenArgTypes {
       after?: string | null; // String
       first: number; // Int!
     }
+    users: { // args
+      id: string; // String!
+    }
   }
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Memory" | "Reflection" | "User"
+  Edge: "MemoryEdge" | "UserEdge"
+  Node: "Memory" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Memory: "Node"
-  Reflection: "Node"
+  MemoryEdge: "Edge"
   User: "Node"
+  UserEdge: "Edge"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -263,7 +283,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "Node";
+export type NexusGenAbstractsUsingStrategyResolveType = "Edge" | "Node";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

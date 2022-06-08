@@ -5,9 +5,9 @@
 """Date custom scalar type"""
 scalar DateScalar
 
-type Edge {
+"""The base definition of a relay-style edge"""
+interface Edge {
   cursor: String
-  node: User
 }
 
 """Represents a memory of the subject (origin) of grief"""
@@ -29,12 +29,22 @@ type Memory implements Node {
   title: String
 }
 
+type MemoryEdge implements Edge {
+  cursor: String
+  node: Memory
+}
+
+type MemoryResponse {
+  edges: [MemoryEdge]
+  pageInfo: PageInfo
+}
+
 type Mutation {
   createMemory(body: String!, story: String!, title: String!): Memory!
   createUser(email: String!, firstName: String!, lastName: String!): User
   deleteUser(id: String!): User
   editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
-  editUser(email: String, firstName: String, id: String!, lastName: String): User
+  editUser(email: String!, firstName: String!, id: String!, lastName: String!): User
 }
 
 """The GUID of the node"""
@@ -50,23 +60,14 @@ type PageInfo {
 type Query {
   """A single memory"""
   memory(id: String!): Memory
-  memoryConnection(after: String, first: Int!): Response
+  memoryConnection(after: String, first: Int!): MemoryResponse
 
   """A single user"""
   user(id: String!): User
-  userConnection(after: String, first: Int!): Response
-}
+  userConnection(after: String, first: Int!): UserResponse
 
-type Reflection implements Node {
-  createdAt: DateScalar
-  deletedAt: DateScalar
-  id: String
-  prompt: String
-}
-
-type Response {
-  edges: [Edge]
-  pageInfo: PageInfo
+  """A single user"""
+  users(id: String!): User
 }
 
 type User implements Node {
@@ -74,4 +75,14 @@ type User implements Node {
   firstName: String
   id: String
   lastName: String
+}
+
+type UserEdge implements Edge {
+  cursor: String
+  node: User
+}
+
+type UserResponse {
+  edges: [UserEdge]
+  pageInfo: PageInfo
 }
