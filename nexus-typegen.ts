@@ -49,6 +49,7 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
+    owner?: NexusGenRootTypes['User'] | null; // User
     story?: string | null; // String
     title?: string | null; // String
   }
@@ -66,7 +67,24 @@ export interface NexusGenObjects {
     hasNextPage?: boolean | null; // Boolean
   }
   Query: {};
+  Site: { // root type
+    createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    id?: string | null; // String
+    owner?: NexusGenRootTypes['User'] | null; // User
+    title?: string | null; // String
+  }
+  SiteConnectionEdge: { // root type
+    cursor?: string | null; // String
+    node?: NexusGenRootTypes['Site'] | null; // Site
+  }
+  SiteConnectionResponse: { // root type
+    edges?: Array<NexusGenRootTypes['SiteConnectionEdge'] | null> | null; // [SiteConnectionEdge]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
   User: { // root type
+    createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     email?: string | null; // String
     firstName?: string | null; // String
     id?: string | null; // String
@@ -83,8 +101,8 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Edge: NexusGenRootTypes['MemoryConnectionEdge'] | NexusGenRootTypes['UserConnectionEdge'];
-  Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['User'];
+  Edge: NexusGenRootTypes['MemoryConnectionEdge'] | NexusGenRootTypes['SiteConnectionEdge'] | NexusGenRootTypes['UserConnectionEdge'];
+  Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['Site'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -100,6 +118,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
+    owner: NexusGenRootTypes['User'] | null; // User
     story: string | null; // String
     title: string | null; // String
   }
@@ -113,9 +132,11 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createMemory: NexusGenRootTypes['Memory']; // Memory!
+    createSite: NexusGenRootTypes['Site']; // Site!
     createUser: NexusGenRootTypes['User'] | null; // User
     deleteUser: NexusGenRootTypes['User'] | null; // User
     editMemory: NexusGenRootTypes['Memory']; // Memory!
+    editSite: NexusGenRootTypes['Site']; // Site!
     editUser: NexusGenRootTypes['User'] | null; // User
   }
   PageInfo: { // field return type
@@ -125,11 +146,30 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     memory: NexusGenRootTypes['Memory'] | null; // Memory
     memoryConnection: NexusGenRootTypes['MemoryConnectionResponse'] | null; // MemoryConnectionResponse
+    site: NexusGenRootTypes['Site'] | null; // Site
+    siteConnection: NexusGenRootTypes['SiteConnectionResponse'] | null; // SiteConnectionResponse
     user: NexusGenRootTypes['User'] | null; // User
     userConnection: NexusGenRootTypes['UserConnectionResponse'] | null; // UserConnectionResponse
     users: NexusGenRootTypes['User'] | null; // User
   }
+  Site: { // field return type
+    createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    id: string | null; // String
+    owner: NexusGenRootTypes['User'] | null; // User
+    title: string | null; // String
+  }
+  SiteConnectionEdge: { // field return type
+    cursor: string | null; // String
+    node: NexusGenRootTypes['Site'] | null; // Site
+  }
+  SiteConnectionResponse: { // field return type
+    edges: Array<NexusGenRootTypes['SiteConnectionEdge'] | null> | null; // [SiteConnectionEdge]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
   User: { // field return type
+    createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
+    deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     email: string | null; // String
     firstName: string | null; // String
     id: string | null; // String
@@ -157,6 +197,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
+    owner: 'User'
     story: 'String'
     title: 'String'
   }
@@ -170,9 +211,11 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createMemory: 'Memory'
+    createSite: 'Site'
     createUser: 'User'
     deleteUser: 'User'
     editMemory: 'Memory'
+    editSite: 'Site'
     editUser: 'User'
   }
   PageInfo: { // field return type name
@@ -182,11 +225,30 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     memory: 'Memory'
     memoryConnection: 'MemoryConnectionResponse'
+    site: 'Site'
+    siteConnection: 'SiteConnectionResponse'
     user: 'User'
     userConnection: 'UserConnectionResponse'
     users: 'User'
   }
+  Site: { // field return type name
+    createdAt: 'DateScalar'
+    deletedAt: 'DateScalar'
+    id: 'String'
+    owner: 'User'
+    title: 'String'
+  }
+  SiteConnectionEdge: { // field return type name
+    cursor: 'String'
+    node: 'Site'
+  }
+  SiteConnectionResponse: { // field return type name
+    edges: 'SiteConnectionEdge'
+    pageInfo: 'PageInfo'
+  }
   User: { // field return type name
+    createdAt: 'DateScalar'
+    deletedAt: 'DateScalar'
     email: 'String'
     firstName: 'String'
     id: 'String'
@@ -215,6 +277,10 @@ export interface NexusGenArgTypes {
       story: string; // String!
       title: string; // String!
     }
+    createSite: { // args
+      owner: string; // String!
+      title: string; // String!
+    }
     createUser: { // args
       email: string; // String!
       firstName: string; // String!
@@ -227,6 +293,10 @@ export interface NexusGenArgTypes {
       body: string; // String!
       id: string; // String!
       story: string; // String!
+      title: string; // String!
+    }
+    editSite: { // args
+      id: string; // String!
       title: string; // String!
     }
     editUser: { // args
@@ -244,6 +314,13 @@ export interface NexusGenArgTypes {
       after?: string | null; // String
       first: number; // Int!
     }
+    site: { // args
+      id: string; // String!
+    }
+    siteConnection: { // args
+      after?: string | null; // String
+      first: number; // Int!
+    }
     user: { // args
       id: string; // String!
     }
@@ -258,13 +335,15 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Edge: "MemoryConnectionEdge" | "UserConnectionEdge"
-  Node: "Memory" | "User"
+  Edge: "MemoryConnectionEdge" | "SiteConnectionEdge" | "UserConnectionEdge"
+  Node: "Memory" | "Site" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Memory: "Node"
   MemoryConnectionEdge: "Edge"
+  Site: "Node"
+  SiteConnectionEdge: "Edge"
   User: "Node"
   UserConnectionEdge: "Edge"
 }

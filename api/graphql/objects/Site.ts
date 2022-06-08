@@ -1,40 +1,36 @@
 import { objectType, extendType, stringArg, intArg, nonNull } from 'nexus';
 
-export const Memory = objectType({
-  name: 'Memory',
-  description: 'Represents a memory of the subject (origin) of grief',
+export const Site = objectType({
+  name: 'Site',
+  description: 'Represents a momento site for grieving someone or something',
   definition(t) {
     t.implements('Node');
-    t.string('title', { description: 'The title of the memory' });
-    t.string('story', { description: 'The story attached to the memory' });
-    t.string('body', { description: 'The body text of the memory' });
-    t.field('owner', {
-      type: 'User',
-      description: 'The owner (generally also the creator) of the memory'
-    });
+    t.string('title', { description: 'The title of the site' });
+    t.field('owner', { type: 'User', description: 'The owner of the site' });
     t.date('createdAt', {
-      description: 'When the memory was created on momento'
+      description: 'When the site was created on momento'
     });
-    t.date('deletedAt', { description: 'When the memory was deleted' });
+    t.date('deletedAt', { description: 'When the site was deleted' });
+    // TODO more fields
   }
 });
 
-export const MemoryQuery = extendType({
+export const SiteQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.field('memory', {
-      type: 'Memory',
-      description: 'A single memory',
+    t.field('site', {
+      type: 'Site',
+      description: 'A single site',
       args: {
         id: nonNull(stringArg())
       },
       resolve: (_, args, ctx) => {
-        return ctx.db.memory.findUnique({ where: { id: args.id } });
+        return ctx.db.site.findUnique({ where: { id: args.id } });
       }
     });
-    t.field('memoryConnection', {
-      type: 'MemoryConnectionResponse',
-      description: 'A relay-style connection to paginated memories',
+    t.field('siteConnection', {
+      type: 'SiteConnectionResponse',
+      description: 'A relay-style connection to paginated sites',
       args: {
         first: nonNull(intArg()),
         after: stringArg()
@@ -43,7 +39,7 @@ export const MemoryQuery = extendType({
         let queryResults = [];
         if (args.after) {
           // check if there is a cursor as the argument
-          queryResults = await ctx.db.memory.findMany({
+          queryResults = await ctx.db.site.findMany({
             take: args.first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
@@ -53,7 +49,7 @@ export const MemoryQuery = extendType({
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
-          queryResults = await ctx.db.memory.findMany({
+          queryResults = await ctx.db.site.findMany({
             take: args.first
           });
         }
@@ -69,14 +65,15 @@ export const MemoryQuery = extendType({
           };
         }
 
-        // the query has returned memories, so figure out the page info (more pages?) and return results
+        // the query has returned memories
+        // so figure out the page info (more pages?) and return results
 
         // get the last element in the previous result set
         const lastUserResults = queryResults[queryResults.length - 1];
         // cursor we'll return in subsequent requests
         const { id: newCursor } = lastUserResults || {};
         // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.db.memory.findMany({
+        const secondQueryResults = await ctx.db.site.findMany({
           take: args.first,
           cursor: {
             id: newCursor
@@ -91,9 +88,9 @@ export const MemoryQuery = extendType({
             // is greater than the response of the second query
             hasNextPage: secondQueryResults.length > args.first
           },
-          edges: queryResults.map((memory: { id: string }) => ({
-            cursor: memory.id,
-            node: memory
+          edges: queryResults.map((site: { id: string }) => ({
+            cursor: site.id,
+            node: site
           }))
         };
 
@@ -103,63 +100,58 @@ export const MemoryQuery = extendType({
   }
 });
 
-export const MemoryMutation = extendType({
+export const SiteMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.nonNull.field('editMemory', {
-      type: 'Memory',
+    t.nonNull.field('editSite', {
+      type: 'Site',
       args: {
         id: nonNull(stringArg()),
-        title: nonNull(stringArg()),
-        body: nonNull(stringArg()),
-        story: nonNull(stringArg())
+        title: nonNull(stringArg())
       },
       resolve(_root, args, ctx) {
-        const { id, title, body, story } = args;
-        const memory = {
+        const { id, title } = args;
+        const site = {
           id,
-          title,
-          body,
-          story,
-          createdAt: new Date()
+          title
         };
 
-        ctx.db.memory.update({ data: memory, where: { id } });
-        return memory;
+        ctx.db.site.update({ data: site, where: { id } });
+        return site;
       }
     });
-    t.nonNull.field('createMemory', {
-      type: 'Memory',
+    t.nonNull.field('createSite', {
+      type: 'Site',
       args: {
         title: nonNull(stringArg()),
-        body: nonNull(stringArg()),
-        story: nonNull(stringArg())
+        // TODO this should be fetched in middleware to be the auth'd creator
+        owner: nonNull(stringArg())
       },
       async resolve(_root, args, ctx) {
-        const memory = args;
-        const mem = await ctx.db.memory.create({ data: memory });
+        const siteData = args;
+        const mem = await ctx.db.site.create({ data: siteData });
         return mem;
       }
     });
   }
 });
 
-export const MemoryConnectionEdge = objectType({
-  name: 'MemoryConnectionEdge',
+export const SiteConnectionEdge = objectType({
+  name: 'SiteConnectionEdge',
   definition(t) {
     t.implements('Edge');
     t.field('node', {
-      type: Memory
+      type: Site
     });
   }
 });
 
-export const MemoryConnectionResponse = objectType({
-  name: 'MemoryConnectionResponse',
+export const SiteConnectionResponse = objectType({
+  name: 'SiteConnectionResponse',
   definition(t) {
     t.field('pageInfo', { type: 'PageInfo' });
     t.list.field('edges', {
-      type: MemoryConnectionEdge
+      type: SiteConnectionEdge
     });
   }
 });

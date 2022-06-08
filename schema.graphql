@@ -22,6 +22,9 @@ type Memory implements Node {
   deletedAt: DateScalar
   id: String
 
+  """The owner (generally also the creator) of the memory"""
+  owner: User
+
   """The story attached to the memory"""
   story: String
 
@@ -41,9 +44,11 @@ type MemoryConnectionResponse {
 
 type Mutation {
   createMemory(body: String!, story: String!, title: String!): Memory!
+  createSite(owner: String!, title: String!): Site!
   createUser(email: String!, firstName: String!, lastName: String!): User
   deleteUser(id: String!): User
   editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
+  editSite(id: String!, title: String!): Site!
   editUser(email: String!, firstName: String!, id: String!, lastName: String!): User
 }
 
@@ -60,17 +65,55 @@ type PageInfo {
 type Query {
   """A single memory"""
   memory(id: String!): Memory
+
+  """A relay-style connection to paginated memories"""
   memoryConnection(after: String, first: Int!): MemoryConnectionResponse
+
+  """A single site"""
+  site(id: String!): Site
+
+  """A relay-style connection to paginated sites"""
+  siteConnection(after: String, first: Int!): SiteConnectionResponse
 
   """A single user"""
   user(id: String!): User
+
+  """A relay-style connection to paginated users"""
   userConnection(after: String, first: Int!): UserConnectionResponse
 
   """A single user"""
   users(id: String!): User
 }
 
+"""Represents a momento site for grieving someone or something"""
+type Site implements Node {
+  """When the site was created on momento"""
+  createdAt: DateScalar
+
+  """When the site was deleted"""
+  deletedAt: DateScalar
+  id: String
+
+  """The owner of the site"""
+  owner: User
+
+  """The title of the site"""
+  title: String
+}
+
+type SiteConnectionEdge implements Edge {
+  cursor: String
+  node: Site
+}
+
+type SiteConnectionResponse {
+  edges: [SiteConnectionEdge]
+  pageInfo: PageInfo
+}
+
 type User implements Node {
+  createdAt: DateScalar
+  deletedAt: DateScalar
   email: String
   firstName: String
   id: String

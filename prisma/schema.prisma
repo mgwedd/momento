@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma is a unified data layer abstraction.
+// Learn more about this Prisma schema file at: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -10,18 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Site {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  createdAt DateTime?
+  deletedAt DateTime?
+}
+
 model Memory {
-  id                      String     @id @default(auto()) @map("_id") @db.ObjectId
-  title                   String
-  body                    String
-  story                   String
-  createdAt               DateTime? 
-  deletedAt               DateTime? 
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  body      String
+  story     String
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  createdAt DateTime?
+  deletedAt DateTime?
 }
 
 model User {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String 
-  lastName      String 
-  email         String 
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  email     String
+  createdAt DateTime?
+  deletedAt DateTime?
+  Site      Site[]
+  Memory    Memory[]
 }

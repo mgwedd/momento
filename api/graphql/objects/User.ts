@@ -7,6 +7,8 @@ export const User = objectType({
     t.string('email');
     t.string('firstName');
     t.string('lastName');
+    t.date('createdAt');
+    t.date('deletedAt');
     // WIP other fields, to mirror auth0 user
   }
 });
@@ -38,6 +40,7 @@ export const UserQuery = extendType({
     });
     t.field('userConnection', {
       type: 'UserConnectionResponse',
+      description: 'A relay-style connection to paginated users',
       args: {
         first: nonNull(intArg()),
         after: stringArg()
@@ -72,7 +75,8 @@ export const UserQuery = extendType({
           };
         }
 
-        // the query has returned memories, so figure out the page info (more pages?) and return results
+        // the query has returned memories
+        // so figure out the page info (more pages?) and return results
 
         // get the last element in the previous result set
         const lastUserResults = queryResults[queryResults.length - 1];
@@ -90,7 +94,8 @@ export const UserQuery = extendType({
         const result = {
           pageInfo: {
             endCursor: newCursor,
-            // we have a next page if the number of items is greater than the response of the second query
+            // we have a next page if the number of items
+            // is greater than the response of the second query
             hasNextPage: secondQueryResults.length > args.first
           },
           edges: queryResults.map((memory: { id: string }) => ({
@@ -127,7 +132,7 @@ export const UserMutation = extendType({
       type: 'User',
       args: {
         // TODO in reality, not all of these fields should be required
-        // but need to resolve TS issues with optionality 
+        // but need to resolve TS issues with optionality
         id: nonNull(stringArg()),
         firstName: nonNull(stringArg()),
         lastName: nonNull(stringArg()),
@@ -159,7 +164,7 @@ export const UserMutation = extendType({
 export const UserConnectionEdge = objectType({
   name: 'UserConnectionEdge',
   definition(t) {
-    t.implements('Edge')
+    t.implements('Edge');
     t.field('node', {
       type: User
     });
@@ -169,7 +174,7 @@ export const UserConnectionEdge = objectType({
 export const UserConnectionResponse = objectType({
   name: 'UserConnectionResponse',
   definition(t) {
-    t.field('pageInfo', { type: 'PageInfo' })
+    t.field('pageInfo', { type: 'PageInfo' });
     t.list.field('edges', {
       type: UserConnectionEdge
     });
