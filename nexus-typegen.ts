@@ -52,12 +52,12 @@ export interface NexusGenObjects {
     story?: string | null; // String
     title?: string | null; // String
   }
-  MemoryEdge: { // root type
+  MemoryConnectionEdge: { // root type
     cursor?: string | null; // String
     node?: NexusGenRootTypes['Memory'] | null; // Memory
   }
-  MemoryResponse: { // root type
-    edges?: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+  MemoryConnectionResponse: { // root type
+    edges?: Array<NexusGenRootTypes['MemoryConnectionEdge'] | null> | null; // [MemoryConnectionEdge]
     pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   Mutation: {};
@@ -72,18 +72,18 @@ export interface NexusGenObjects {
     id?: string | null; // String
     lastName?: string | null; // String
   }
-  UserEdge: { // root type
+  UserConnectionEdge: { // root type
     cursor?: string | null; // String
     node?: NexusGenRootTypes['User'] | null; // User
   }
-  UserResponse: { // root type
-    edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+  UserConnectionResponse: { // root type
+    edges?: Array<NexusGenRootTypes['UserConnectionEdge'] | null> | null; // [UserConnectionEdge]
     pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
 }
 
 export interface NexusGenInterfaces {
-  Edge: NexusGenRootTypes['MemoryEdge'] | NexusGenRootTypes['UserEdge'];
+  Edge: NexusGenRootTypes['MemoryConnectionEdge'] | NexusGenRootTypes['UserConnectionEdge'];
   Node: NexusGenRootTypes['Memory'] | NexusGenRootTypes['User'];
 }
 
@@ -103,12 +103,12 @@ export interface NexusGenFieldTypes {
     story: string | null; // String
     title: string | null; // String
   }
-  MemoryEdge: { // field return type
+  MemoryConnectionEdge: { // field return type
     cursor: string | null; // String
     node: NexusGenRootTypes['Memory'] | null; // Memory
   }
-  MemoryResponse: { // field return type
-    edges: Array<NexusGenRootTypes['MemoryEdge'] | null> | null; // [MemoryEdge]
+  MemoryConnectionResponse: { // field return type
+    edges: Array<NexusGenRootTypes['MemoryConnectionEdge'] | null> | null; // [MemoryConnectionEdge]
     pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   Mutation: { // field return type
@@ -124,9 +124,9 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     memory: NexusGenRootTypes['Memory'] | null; // Memory
-    memoryConnection: NexusGenRootTypes['MemoryResponse'] | null; // MemoryResponse
+    memoryConnection: NexusGenRootTypes['MemoryConnectionResponse'] | null; // MemoryConnectionResponse
     user: NexusGenRootTypes['User'] | null; // User
-    userConnection: NexusGenRootTypes['UserResponse'] | null; // UserResponse
+    userConnection: NexusGenRootTypes['UserConnectionResponse'] | null; // UserConnectionResponse
     users: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
@@ -135,12 +135,12 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     lastName: string | null; // String
   }
-  UserEdge: { // field return type
+  UserConnectionEdge: { // field return type
     cursor: string | null; // String
     node: NexusGenRootTypes['User'] | null; // User
   }
-  UserResponse: { // field return type
-    edges: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+  UserConnectionResponse: { // field return type
+    edges: Array<NexusGenRootTypes['UserConnectionEdge'] | null> | null; // [UserConnectionEdge]
     pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   Edge: { // field return type
@@ -160,12 +160,12 @@ export interface NexusGenFieldTypeNames {
     story: 'String'
     title: 'String'
   }
-  MemoryEdge: { // field return type name
+  MemoryConnectionEdge: { // field return type name
     cursor: 'String'
     node: 'Memory'
   }
-  MemoryResponse: { // field return type name
-    edges: 'MemoryEdge'
+  MemoryConnectionResponse: { // field return type name
+    edges: 'MemoryConnectionEdge'
     pageInfo: 'PageInfo'
   }
   Mutation: { // field return type name
@@ -181,9 +181,9 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     memory: 'Memory'
-    memoryConnection: 'MemoryResponse'
+    memoryConnection: 'MemoryConnectionResponse'
     user: 'User'
-    userConnection: 'UserResponse'
+    userConnection: 'UserConnectionResponse'
     users: 'User'
   }
   User: { // field return type name
@@ -192,12 +192,12 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     lastName: 'String'
   }
-  UserEdge: { // field return type name
+  UserConnectionEdge: { // field return type name
     cursor: 'String'
     node: 'User'
   }
-  UserResponse: { // field return type name
-    edges: 'UserEdge'
+  UserConnectionResponse: { // field return type name
+    edges: 'UserConnectionEdge'
     pageInfo: 'PageInfo'
   }
   Edge: { // field return type name
@@ -258,15 +258,15 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Edge: "MemoryEdge" | "UserEdge"
+  Edge: "MemoryConnectionEdge" | "UserConnectionEdge"
   Node: "Memory" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Memory: "Node"
-  MemoryEdge: "Edge"
+  MemoryConnectionEdge: "Edge"
   User: "Node"
-  UserEdge: "Edge"
+  UserConnectionEdge: "Edge"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;

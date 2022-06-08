@@ -37,7 +37,7 @@ export const MemoryQuery = extendType({
       }
     });
     t.field('memoryConnection', {
-      type: 'MemoryResponse',
+      type: 'MemoryConnectionResponse',
       args: {
         first: nonNull(intArg()),
         after: stringArg()
@@ -146,8 +146,8 @@ export const MemoryMutation = extendType({
   }
 });
 
-export const MemoryEdge = objectType({
-  name: 'MemoryEdge',
+export const MemoryConnectionEdge = objectType({
+  name: 'MemoryConnectionEdge',
   definition(t) {
     t.implements('Edge')
     t.field('node', {
@@ -156,12 +156,12 @@ export const MemoryEdge = objectType({
   }
 });
 
-export const MemoryResponse = objectType({
-  name: 'MemoryResponse',
+export const MemoryConnectionResponse = objectType({
+  name: 'MemoryConnectionResponse',
   definition(t) {
     t.field('pageInfo', { type: 'PageInfo' })
     t.list.field('edges', {
-      type: MemoryEdge
+      type: MemoryConnectionEdge
     });
   }
 });

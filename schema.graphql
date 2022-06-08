@@ -29,13 +29,13 @@ type Memory implements Node {
   title: String
 }
 
-type MemoryEdge implements Edge {
+type MemoryConnectionEdge implements Edge {
   cursor: String
   node: Memory
 }
 
-type MemoryResponse {
-  edges: [MemoryEdge]
+type MemoryConnectionResponse {
+  edges: [MemoryConnectionEdge]
   pageInfo: PageInfo
 }
 
@@ -60,11 +60,11 @@ type PageInfo {
 type Query {
   """A single memory"""
   memory(id: String!): Memory
-  memoryConnection(after: String, first: Int!): MemoryResponse
+  memoryConnection(after: String, first: Int!): MemoryConnectionResponse
 
   """A single user"""
   user(id: String!): User
-  userConnection(after: String, first: Int!): UserResponse
+  userConnection(after: String, first: Int!): UserConnectionResponse
 
   """A single user"""
   users(id: String!): User
@@ -77,12 +77,12 @@ type User implements Node {
   lastName: String
 }
 
-type UserEdge implements Edge {
+type UserConnectionEdge implements Edge {
   cursor: String
   node: User
 }
 
-type UserResponse {
-  edges: [UserEdge]
+type UserConnectionResponse {
+  edges: [UserConnectionEdge]
   pageInfo: PageInfo
 }

@@ -37,7 +37,7 @@ export const UserQuery = extendType({
       }
     });
     t.field('userConnection', {
-      type: 'UserResponse',
+      type: 'UserConnectionResponse',
       args: {
         first: nonNull(intArg()),
         after: stringArg()
@@ -156,8 +156,8 @@ export const UserMutation = extendType({
   }
 });
 
-export const UserEdge = objectType({
-  name: 'UserEdge',
+export const UserConnectionEdge = objectType({
+  name: 'UserConnectionEdge',
   definition(t) {
     t.implements('Edge')
     t.field('node', {
@@ -166,12 +166,12 @@ export const UserEdge = objectType({
   }
 });
 
-export const UserResponse = objectType({
-  name: 'UserResponse',
+export const UserConnectionResponse = objectType({
+  name: 'UserConnectionResponse',
   definition(t) {
     t.field('pageInfo', { type: 'PageInfo' })
     t.list.field('edges', {
-      type: UserEdge
+      type: UserConnectionEdge
     });
   }
 });
