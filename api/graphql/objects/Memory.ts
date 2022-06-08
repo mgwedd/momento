@@ -8,14 +8,15 @@ export const Memory = objectType({
     t.string('title', { description: 'The title of the memory' });
     t.string('story', { description: 'The story attached to the memory' });
     t.string('body', { description: 'The body text of the memory' });
-    t.field('owner', {
-      type: 'User',
-      description: 'The owner (generally also the creator) of the memory'
-    });
     t.date('createdAt', {
       description: 'When the memory was created on momento'
     });
     t.date('deletedAt', { description: 'When the memory was deleted' });
+    // TODO add more fields
+    // t.field('owner', {
+    //   type: 'User',
+    //   description: 'The owner (generally also the creator) of the memory'
+    // });
   }
 });
 
@@ -69,7 +70,8 @@ export const MemoryQuery = extendType({
           };
         }
 
-        // the query has returned memories, so figure out the page info (more pages?) and return results
+        // the query has returned memories, 
+        // so figure out the page info (more pages?) and return results
 
         // get the last element in the previous result set
         const lastUserResults = queryResults[queryResults.length - 1];

@@ -6,12 +6,12 @@ export const Site = objectType({
   definition(t) {
     t.implements('Node');
     t.string('title', { description: 'The title of the site' });
-    t.field('owner', { type: 'User', description: 'The owner of the site' });
     t.date('createdAt', {
       description: 'When the site was created on momento'
     });
     t.date('deletedAt', { description: 'When the site was deleted' });
     // TODO more fields
+    // t.field('owner', { type: 'User', description: 'The owner of the site' });
   }
 });
 
@@ -125,7 +125,7 @@ export const SiteMutation = extendType({
       args: {
         title: nonNull(stringArg()),
         // TODO this should be fetched in middleware to be the auth'd creator
-        owner: nonNull(stringArg())
+        // owner: nonNull(stringArg())
       },
       async resolve(_root, args, ctx) {
         const siteData = args;

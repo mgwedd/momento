@@ -13,8 +13,8 @@ datasource db {
 model Site {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  owner     User      @relation(fields: [ownerId], references: [id])
-  ownerId   String
+  // owner     User      @relation(fields: [ownerId], references: [id])
+  // ownerId   String
   createdAt DateTime?
   deletedAt DateTime?
 }
@@ -24,8 +24,8 @@ model Memory {
   title     String
   body      String
   story     String
-  owner     User      @relation(fields: [ownerId], references: [id])
-  ownerId   String
+  // owner     User      @relation(fields: [ownerId], references: [id])
+  // ownerId   String
   createdAt DateTime?
   deletedAt DateTime?
 }
@@ -37,6 +37,6 @@ model User {
   email     String
   createdAt DateTime?
   deletedAt DateTime?
-  Site      Site[]
-  Memory    Memory[]
+  // Site      Site[]
+  // Memory    Memory[]
 }

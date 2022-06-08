@@ -49,7 +49,6 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
-    owner?: NexusGenRootTypes['User'] | null; // User
     story?: string | null; // String
     title?: string | null; // String
   }
@@ -71,7 +70,6 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
-    owner?: NexusGenRootTypes['User'] | null; // User
     title?: string | null; // String
   }
   SiteConnectionEdge: { // root type
@@ -118,7 +116,6 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
-    owner: NexusGenRootTypes['User'] | null; // User
     story: string | null; // String
     title: string | null; // String
   }
@@ -156,7 +153,6 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
-    owner: NexusGenRootTypes['User'] | null; // User
     title: string | null; // String
   }
   SiteConnectionEdge: { // field return type
@@ -197,7 +193,6 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
-    owner: 'User'
     story: 'String'
     title: 'String'
   }
@@ -235,7 +230,6 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
-    owner: 'User'
     title: 'String'
   }
   SiteConnectionEdge: { // field return type name
@@ -278,7 +272,6 @@ export interface NexusGenArgTypes {
       title: string; // String!
     }
     createSite: { // args
-      owner: string; // String!
       title: string; // String!
     }
     createUser: { // args
