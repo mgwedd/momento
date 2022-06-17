@@ -1,5 +1,7 @@
 import { objectType, extendType, stringArg, intArg, nonNull } from 'nexus';
 
+const MAX_PAGE_SIZE = 1000;
+
 export const Site = objectType({
   name: 'Site',
   description: 'Represents a momento site for grieving someone or something',
@@ -10,8 +12,11 @@ export const Site = objectType({
       description: 'When the site was created on momento'
     });
     t.date('deletedAt', { description: 'When the site was deleted' });
-    // TODO more fields
-    // t.field('owner', { type: 'User', description: 'The owner of the site' });
+    t.field('owner', { type: 'User', description: 'The owner of the site' });
+    t.list.field('collaborators', {
+      type: 'User',
+      description: 'The collaborators of the site'
+    });
   }
 });
 
@@ -35,22 +40,28 @@ export const SiteQuery = extendType({
         first: nonNull(intArg()),
         after: stringArg()
       },
-      async resolve(_, args, ctx) {
+      async resolve(_, { first, after }, ctx) {
+        if (first > MAX_PAGE_SIZE) {
+          throw new Error(
+            `"first" argument specifies a page size that exceeds the maximum: ${MAX_PAGE_SIZE}`
+          );
+        }
+
         let queryResults = [];
-        if (args.after) {
+        if (after) {
           // check if there is a cursor as the argument
           queryResults = await ctx.db.site.findMany({
-            take: args.first, // the number of items to return from the db
+            take: first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
-              id: args.after // the cursor
+              id: after // the cursor
             }
           });
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
           queryResults = await ctx.db.site.findMany({
-            take: args.first
+            take: first
           });
         }
 
@@ -74,7 +85,7 @@ export const SiteQuery = extendType({
         const { id: newCursor } = lastUserResults || {};
         // query after the cursor to check if we have a next page of results
         const secondQueryResults = await ctx.db.site.findMany({
-          take: args.first,
+          take: first,
           cursor: {
             id: newCursor
           }
@@ -86,7 +97,7 @@ export const SiteQuery = extendType({
             endCursor: newCursor,
             // we have a next page if the number of items
             // is greater than the response of the second query
-            hasNextPage: secondQueryResults.length > args.first
+            hasNextPage: secondQueryResults.length > first
           },
           edges: queryResults.map((site: { id: string }) => ({
             cursor: site.id,
@@ -123,13 +134,15 @@ export const SiteMutation = extendType({
     t.nonNull.field('createSite', {
       type: 'Site',
       args: {
-        title: nonNull(stringArg()),
-        // TODO this should be fetched in middleware to be the auth'd creator
-        // owner: nonNull(stringArg())
+        title: nonNull(stringArg())
       },
       async resolve(_root, args, ctx) {
         const siteData = args;
-        const mem = await ctx.db.site.create({ data: siteData });
+        // get and append user as owner.
+        const userId = '123'; // getAuthUser().id
+        const mem = await ctx.db.site.create({
+          data: { ...siteData, ownerId: userId }
+        });
         return mem;
       }
     });

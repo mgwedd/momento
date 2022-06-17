@@ -12,11 +12,10 @@ export const Memory = objectType({
       description: 'When the memory was created on momento'
     });
     t.date('deletedAt', { description: 'When the memory was deleted' });
-    // TODO add more fields
-    // t.field('owner', {
-    //   type: 'User',
-    //   description: 'The owner (generally also the creator) of the memory'
-    // });
+    t.field('owner', {
+      type: 'User',
+      description: 'The owner (generally also the creator) of the memory'
+    });
   }
 });
 
@@ -38,7 +37,7 @@ export const MemoryQuery = extendType({
       description: 'A relay-style connection to paginated memories',
       args: {
         first: nonNull(intArg()),
-        after: stringArg()
+        after: nonNull(stringArg())
       },
       async resolve(_, args, ctx) {
         let queryResults = [];
@@ -70,7 +69,7 @@ export const MemoryQuery = extendType({
           };
         }
 
-        // the query has returned memories, 
+        // the query has returned memories,
         // so figure out the page info (more pages?) and return results
 
         // get the last element in the previous result set
@@ -116,18 +115,13 @@ export const MemoryMutation = extendType({
         body: nonNull(stringArg()),
         story: nonNull(stringArg())
       },
-      resolve(_root, args, ctx) {
+      async resolve(_root, args, ctx) {
         const { id, title, body, story } = args;
-        const memory = {
-          id,
-          title,
-          body,
-          story,
-          createdAt: new Date()
-        };
-
-        ctx.db.memory.update({ data: memory, where: { id } });
-        return memory;
+        const updatedMemory = await ctx.db.memory.update({
+          data: { title, body, story },
+          where: { id }
+        });
+        return updatedMemory;
       }
     });
     t.nonNull.field('createMemory', {
@@ -139,7 +133,10 @@ export const MemoryMutation = extendType({
       },
       async resolve(_root, args, ctx) {
         const memory = args;
-        const mem = await ctx.db.memory.create({ data: memory });
+        const userId = '123'; // getAuthUser().id
+        const mem = await ctx.db.memory.create({
+          data: { ...memory, ownerId: userId }
+        });
         return mem;
       }
     });

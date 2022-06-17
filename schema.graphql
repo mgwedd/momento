@@ -22,6 +22,9 @@ type Memory implements Node {
   deletedAt: DateScalar
   id: String
 
+  """The owner (generally also the creator) of the memory"""
+  owner: User
+
   """The story attached to the memory"""
   story: String
 
@@ -64,7 +67,7 @@ type Query {
   memory(id: String!): Memory
 
   """A relay-style connection to paginated memories"""
-  memoryConnection(after: String, first: Int!): MemoryConnectionResponse
+  memoryConnection(after: String!, first: Int!): MemoryConnectionResponse
 
   """A single site"""
   site(id: String!): Site
@@ -84,12 +87,18 @@ type Query {
 
 """Represents a momento site for grieving someone or something"""
 type Site implements Node {
+  """The collaborators of the site"""
+  collaborators: [User]
+
   """When the site was created on momento"""
   createdAt: DateScalar
 
   """When the site was deleted"""
   deletedAt: DateScalar
   id: String
+
+  """The owner of the site"""
+  owner: User
 
   """The title of the site"""
   title: String

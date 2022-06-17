@@ -49,6 +49,7 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
+    owner?: NexusGenRootTypes['User'] | null; // User
     story?: string | null; // String
     title?: string | null; // String
   }
@@ -67,9 +68,11 @@ export interface NexusGenObjects {
   }
   Query: {};
   Site: { // root type
+    collaborators?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
+    owner?: NexusGenRootTypes['User'] | null; // User
     title?: string | null; // String
   }
   SiteConnectionEdge: { // root type
@@ -116,6 +119,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
+    owner: NexusGenRootTypes['User'] | null; // User
     story: string | null; // String
     title: string | null; // String
   }
@@ -150,9 +154,11 @@ export interface NexusGenFieldTypes {
     users: NexusGenRootTypes['User'] | null; // User
   }
   Site: { // field return type
+    collaborators: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
+    owner: NexusGenRootTypes['User'] | null; // User
     title: string | null; // String
   }
   SiteConnectionEdge: { // field return type
@@ -193,6 +199,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
+    owner: 'User'
     story: 'String'
     title: 'String'
   }
@@ -227,9 +234,11 @@ export interface NexusGenFieldTypeNames {
     users: 'User'
   }
   Site: { // field return type name
+    collaborators: 'User'
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
+    owner: 'User'
     title: 'String'
   }
   SiteConnectionEdge: { // field return type name
@@ -304,7 +313,7 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     memoryConnection: { // args
-      after?: string | null; // String
+      after: string; // String!
       first: number; // Int!
     }
     site: { // args

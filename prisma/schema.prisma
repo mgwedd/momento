@@ -13,9 +13,9 @@ datasource db {
 model Site {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  // owner     User      @relation(fields: [ownerId], references: [id])
-  // ownerId   String
-  createdAt DateTime?
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  createdAt DateTime  @default(now())
   deletedAt DateTime?
 }
 
@@ -24,9 +24,9 @@ model Memory {
   title     String
   body      String
   story     String
-  // owner     User      @relation(fields: [ownerId], references: [id])
-  // ownerId   String
-  createdAt DateTime?
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  createdAt DateTime  @default(now())
   deletedAt DateTime?
 }
 
@@ -34,9 +34,9 @@ model User {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   firstName String
   lastName  String
-  email     String
-  createdAt DateTime?
+  email     String    @unique
+  createdAt DateTime  @default(now())
   deletedAt DateTime?
-  // Site      Site[]
-  // Memory    Memory[]
+  memories  Memory[]
+  sites     Site[]
 }
