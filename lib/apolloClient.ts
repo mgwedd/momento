@@ -7,7 +7,7 @@ export const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          links: relayStylePagination()
+          memories: relayStylePagination()
         }
       }
     }
