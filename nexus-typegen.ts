@@ -52,6 +52,7 @@ export interface NexusGenObjects {
     owner?: NexusGenRootTypes['User'] | null; // User
     story?: string | null; // String
     title?: string | null; // String
+    updatedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   MemoryConnectionEdge: { // root type
     cursor?: string | null; // String
@@ -74,6 +75,7 @@ export interface NexusGenObjects {
     id?: string | null; // String
     owner?: NexusGenRootTypes['User'] | null; // User
     title?: string | null; // String
+    updatedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   SiteConnectionEdge: { // root type
     cursor?: string | null; // String
@@ -90,6 +92,7 @@ export interface NexusGenObjects {
     firstName?: string | null; // String
     id?: string | null; // String
     lastName?: string | null; // String
+    updatedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   UserConnectionEdge: { // root type
     cursor?: string | null; // String
@@ -122,6 +125,7 @@ export interface NexusGenFieldTypes {
     owner: NexusGenRootTypes['User'] | null; // User
     story: string | null; // String
     title: string | null; // String
+    updatedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   MemoryConnectionEdge: { // field return type
     cursor: string | null; // String
@@ -160,6 +164,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     owner: NexusGenRootTypes['User'] | null; // User
     title: string | null; // String
+    updatedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   SiteConnectionEdge: { // field return type
     cursor: string | null; // String
@@ -176,6 +181,7 @@ export interface NexusGenFieldTypes {
     firstName: string | null; // String
     id: string | null; // String
     lastName: string | null; // String
+    updatedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
   }
   UserConnectionEdge: { // field return type
     cursor: string | null; // String
@@ -202,6 +208,7 @@ export interface NexusGenFieldTypeNames {
     owner: 'User'
     story: 'String'
     title: 'String'
+    updatedAt: 'DateScalar'
   }
   MemoryConnectionEdge: { // field return type name
     cursor: 'String'
@@ -240,6 +247,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     owner: 'User'
     title: 'String'
+    updatedAt: 'DateScalar'
   }
   SiteConnectionEdge: { // field return type name
     cursor: 'String'
@@ -256,6 +264,7 @@ export interface NexusGenFieldTypeNames {
     firstName: 'String'
     id: 'String'
     lastName: 'String'
+    updatedAt: 'DateScalar'
   }
   UserConnectionEdge: { // field return type name
     cursor: 'String'

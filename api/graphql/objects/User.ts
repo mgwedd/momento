@@ -8,6 +8,7 @@ export const User = objectType({
     t.string('firstName');
     t.string('lastName');
     t.date('createdAt');
+    t.date('updatedAt');
     t.date('deletedAt');
     // WIP other fields, to mirror auth0 user
   }

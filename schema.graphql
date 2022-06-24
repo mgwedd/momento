@@ -30,6 +30,7 @@ type Memory implements Node {
 
   """The title of the memory"""
   title: String
+  updatedAt: DateScalar
 }
 
 type MemoryConnectionEdge implements Edge {
@@ -102,6 +103,7 @@ type Site implements Node {
 
   """The title of the site"""
   title: String
+  updatedAt: DateScalar
 }
 
 type SiteConnectionEdge implements Edge {
@@ -121,6 +123,7 @@ type User implements Node {
   firstName: String
   id: String
   lastName: String
+  updatedAt: DateScalar
 }
 
 type UserConnectionEdge implements Edge {

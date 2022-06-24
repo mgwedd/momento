@@ -11,6 +11,7 @@ export const Memory = objectType({
     t.date('createdAt', {
       description: 'When the memory was created on momento'
     });
+    t.date('updatedAt');
     t.date('deletedAt', { description: 'When the memory was deleted' });
     t.field('owner', {
       type: 'User',

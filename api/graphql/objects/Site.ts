@@ -11,6 +11,7 @@ export const Site = objectType({
     t.date('createdAt', {
       description: 'When the site was created on momento'
     });
+    t.date('updatedAt');
     t.date('deletedAt', { description: 'When the site was deleted' });
     t.field('owner', { type: 'User', description: 'The owner of the site' });
     t.list.field('collaborators', {
