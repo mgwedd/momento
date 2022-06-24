@@ -14,6 +14,7 @@ model Site {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   owner     User      @relation(fields: [ownerId], references: [id])
+  memories  Memory[]
   ownerId   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -30,6 +31,8 @@ model Memory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  Site      Site?     @relation(fields: [siteId], references: [id])
+  siteId    String?   @db.ObjectId
 }
 
 model User {
