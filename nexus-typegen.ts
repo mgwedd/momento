@@ -322,7 +322,7 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     memoryConnection: { // args
-      after: string; // String!
+      after?: string | null; // String
       first: number; // Int!
     }
     site: { // args

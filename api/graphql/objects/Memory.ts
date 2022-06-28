@@ -38,7 +38,7 @@ export const MemoryQuery = extendType({
       description: 'A relay-style connection to paginated memories',
       args: {
         first: nonNull(intArg()),
-        after: nonNull(stringArg())
+        after: stringArg()
       },
       async resolve(_, args, ctx) {
         let queryResults = [];

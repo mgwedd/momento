@@ -68,7 +68,7 @@ type Query {
   memory(id: String!): Memory
 
   """A relay-style connection to paginated memories"""
-  memoryConnection(after: String!, first: Int!): MemoryConnectionResponse
+  memoryConnection(after: String, first: Int!): MemoryConnectionResponse
 
   """A single site"""
   site(id: String!): Site

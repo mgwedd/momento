@@ -11,7 +11,7 @@
     "db-seed": "tsc prisma/seed.ts && cat prisma/seed.js | node --input-type=\"commonjs\" && rm prisma/seed.js"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "npx prisma@2.30.0-integration-db-seed-new-behavior.1 db seed"
   },
   "keywords": [],
   "author": "",

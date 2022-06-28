@@ -121,15 +121,18 @@ export const SiteMutation = extendType({
         id: nonNull(stringArg()),
         title: nonNull(stringArg())
       },
-      resolve(_root, args, ctx) {
+      async resolve(_root, args, ctx) {
         const { id, title } = args;
         const site = {
           id,
           title
         };
 
-        ctx.db.site.update({ data: site, where: { id } });
-        return site;
+        const result = await ctx.db.site.update({
+          data: { title },
+          where: { id }
+        });
+        return result;
       }
     });
     t.nonNull.field('createSite', {
