@@ -24,7 +24,6 @@ model Site {
 model Memory {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  body      String
   story     String
   owner     User      @relation(fields: [ownerId], references: [id])
   ownerId   String

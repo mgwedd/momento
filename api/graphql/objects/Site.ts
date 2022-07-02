@@ -31,7 +31,7 @@ export const SiteQuery = extendType({
         id: nonNull(stringArg())
       },
       resolve: (_, args, ctx) => {
-        return ctx.db.site.findUnique({ where: { id: args.id } });
+        return ctx.prisma.site.findUnique({ where: { id: args.id } });
       }
     });
     t.field('siteConnection', {
@@ -51,7 +51,7 @@ export const SiteQuery = extendType({
         let queryResults = [];
         if (after) {
           // check if there is a cursor as the argument
-          queryResults = await ctx.db.site.findMany({
+          queryResults = await ctx.prisma.site.findMany({
             take: first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
@@ -61,7 +61,7 @@ export const SiteQuery = extendType({
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
-          queryResults = await ctx.db.site.findMany({
+          queryResults = await ctx.prisma.site.findMany({
             take: first
           });
         }
@@ -85,7 +85,7 @@ export const SiteQuery = extendType({
         // cursor we'll return in subsequent requests
         const { id: newCursor } = lastUserResults || {};
         // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.db.site.findMany({
+        const secondQueryResults = await ctx.prisma.site.findMany({
           take: first,
           cursor: {
             id: newCursor
@@ -128,7 +128,7 @@ export const SiteMutation = extendType({
           title
         };
 
-        const result = await ctx.db.site.update({
+        const result = await ctx.prisma.site.update({
           data: { title },
           where: { id }
         });
@@ -144,7 +144,7 @@ export const SiteMutation = extendType({
         const siteData = args;
         // get and append user as owner.
         const userId = '123'; // getAuthUser().id
-        const mem = await ctx.db.site.create({
+        const mem = await ctx.prisma.site.create({
           data: { ...siteData, ownerId: userId }
         });
         return mem;

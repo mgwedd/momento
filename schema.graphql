@@ -12,9 +12,6 @@ interface Edge {
 
 """Represents a memory of the subject (origin) of grief"""
 type Memory implements Node {
-  """The body text of the memory"""
-  body: String
-
   """When the memory was created on momento"""
   createdAt: DateScalar
 
@@ -44,11 +41,11 @@ type MemoryConnectionResponse {
 }
 
 type Mutation {
-  createMemory(body: String!, story: String!, title: String!): Memory!
+  createMemory(story: String!, title: String!): Memory!
   createSite(title: String!): Site!
   createUser(email: String!, firstName: String!, lastName: String!): User
   deleteUser(id: String!): User
-  editMemory(body: String!, id: String!, story: String!, title: String!): Memory!
+  editMemory(id: String!, story: String!, title: String!): Memory!
   editSite(id: String!, title: String!): Site!
   editUser(email: String!, firstName: String!, id: String!, lastName: String!): User
 }

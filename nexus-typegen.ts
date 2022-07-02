@@ -45,7 +45,6 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Memory: { // root type
-    body?: string | null; // String
     createdAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt?: NexusGenScalars['DateScalar'] | null; // DateScalar
     id?: string | null; // String
@@ -118,7 +117,6 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Memory: { // field return type
-    body: string | null; // String
     createdAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     deletedAt: NexusGenScalars['DateScalar'] | null; // DateScalar
     id: string | null; // String
@@ -201,7 +199,6 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Memory: { // field return type name
-    body: 'String'
     createdAt: 'DateScalar'
     deletedAt: 'DateScalar'
     id: 'String'
@@ -285,7 +282,6 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createMemory: { // args
-      body: string; // String!
       story: string; // String!
       title: string; // String!
     }
@@ -301,7 +297,6 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     editMemory: { // args
-      body: string; // String!
       id: string; // String!
       story: string; // String!
       title: string; // String!

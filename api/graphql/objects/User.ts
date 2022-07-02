@@ -24,7 +24,9 @@ export const UserQuery = extendType({
         id: nonNull(stringArg())
       },
       async resolve(_, args, ctx) {
-        const user = await ctx.db.user.findUnique({ where: { id: args.id } });
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: args.id }
+        });
         return user;
       }
     });
@@ -35,7 +37,9 @@ export const UserQuery = extendType({
         id: nonNull(stringArg())
       },
       async resolve(_, args, ctx) {
-        const user = await ctx.db.user.findUnique({ where: { id: args.id } });
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: args.id }
+        });
         return user;
       }
     });
@@ -50,7 +54,7 @@ export const UserQuery = extendType({
         let queryResults = [];
         if (args.after) {
           // check if there is a cursor as the argument
-          queryResults = await ctx.db.user.findMany({
+          queryResults = await ctx.prisma.user.findMany({
             take: args.first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
@@ -60,7 +64,7 @@ export const UserQuery = extendType({
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
-          queryResults = await ctx.db.user.findMany({
+          queryResults = await ctx.prisma.user.findMany({
             take: args.first
           });
         }
@@ -84,7 +88,7 @@ export const UserQuery = extendType({
         // cursor we'll return in subsequent requests
         const { id: newCursor } = lastUserResults || {};
         // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.db.user.findMany({
+        const secondQueryResults = await ctx.prisma.user.findMany({
           take: args.first,
           cursor: {
             id: newCursor
@@ -123,7 +127,7 @@ export const UserMutation = extendType({
       },
       async resolve(_root, args, ctx) {
         const { firstName, lastName, email } = args;
-        const user = await ctx.db.user.create({
+        const user = await ctx.prisma.user.create({
           data: { firstName, lastName, email }
         });
         return user;
@@ -141,7 +145,7 @@ export const UserMutation = extendType({
       },
       async resolve(_root, args, ctx) {
         const { id, firstName, lastName, email } = args;
-        const user = await ctx.db.user.update({
+        const user = await ctx.prisma.user.update({
           data: { firstName, lastName, email },
           where: { id }
         });
@@ -155,7 +159,7 @@ export const UserMutation = extendType({
       },
       async resolve(_root, args, ctx) {
         const { id } = args;
-        const user = await ctx.db.user.delete({ where: { id } });
+        const user = await ctx.prisma.user.delete({ where: { id } });
         return user;
       }
     });

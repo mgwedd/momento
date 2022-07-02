@@ -7,7 +7,6 @@ export const Memory = objectType({
     t.implements('Node');
     t.string('title', { description: 'The title of the memory' });
     t.string('story', { description: 'The story attached to the memory' });
-    t.string('body', { description: 'The body text of the memory' });
     t.date('createdAt', {
       description: 'When the memory was created on momento'
     });
@@ -30,7 +29,10 @@ export const MemoryQuery = extendType({
         id: nonNull(stringArg())
       },
       resolve: (_, args, ctx) => {
-        return ctx.db.memory.findUnique({ where: { id: args.id } });
+        return ctx.prisma.memory.findUnique({
+          where: { id: args.id },
+          include: { owner: true } // todo make optional
+        });
       }
     });
     t.field('memoryConnection', {
@@ -44,7 +46,7 @@ export const MemoryQuery = extendType({
         let queryResults = [];
         if (args.after) {
           // check if there is a cursor as the argument
-          queryResults = await ctx.db.memory.findMany({
+          queryResults = await ctx.prisma.memory.findMany({
             take: args.first, // the number of items to return from the db
             skip: 1, // skip the cursor itself
             cursor: {
@@ -54,7 +56,7 @@ export const MemoryQuery = extendType({
         } else {
           // if no cursor, this means that this is the first request
           // we wil return the first items in the db
-          queryResults = await ctx.db.memory.findMany({
+          queryResults = await ctx.prisma.memory.findMany({
             take: args.first
           });
         }
@@ -78,7 +80,7 @@ export const MemoryQuery = extendType({
         // cursor we'll return in subsequent requests
         const { id: newCursor } = lastUserResults || {};
         // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.db.memory.findMany({
+        const secondQueryResults = await ctx.prisma.memory.findMany({
           take: args.first,
           cursor: {
             id: newCursor
@@ -113,13 +115,12 @@ export const MemoryMutation = extendType({
       args: {
         id: nonNull(stringArg()),
         title: nonNull(stringArg()),
-        body: nonNull(stringArg()),
         story: nonNull(stringArg())
       },
       async resolve(_root, args, ctx) {
-        const { id, title, body, story } = args;
-        const updatedMemory = await ctx.db.memory.update({
-          data: { title, body, story },
+        const { id, title, story } = args;
+        const updatedMemory = await ctx.prisma.memory.update({
+          data: { title, story },
           where: { id }
         });
         return updatedMemory;
@@ -129,13 +130,12 @@ export const MemoryMutation = extendType({
       type: 'Memory',
       args: {
         title: nonNull(stringArg()),
-        body: nonNull(stringArg()),
         story: nonNull(stringArg())
       },
       async resolve(_root, args, ctx) {
         const memory = args;
         const userId = '123'; // getAuthUser().id
-        const mem = await ctx.db.memory.create({
+        const mem = await ctx.prisma.memory.create({
           data: { ...memory, ownerId: userId }
         });
         return mem;

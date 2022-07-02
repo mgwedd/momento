@@ -1,5 +1,3 @@
-// db/seed.ts
-
 import { faker } from '@faker-js/faker';
 import { db } from '../api/db';
 
@@ -89,10 +87,10 @@ async function createUsers(numToCreate = 10) {
   for (let i = 0; i < numToCreate; i++) {
     const name = faker.name.findName();
     const firstName = name.split(' ')[0];
-    const lastName = name.split(' ')[0];
+    const lastName = name.split(' ')[1];
 
     usersData.push({
-      email: faker.unique(() => faker.name.firstName() + faker.name.lastName()),
+      email: faker.unique(() => `${firstName + lastName}@gmail.com`),
       firstName,
       lastName
     });
@@ -138,7 +136,6 @@ function randomListMemsForUser(
 ) {
   const makeMem = (siteId: string) => ({
     title: faker.random.words(5),
-    body: faker.random.words(10),
     story: faker.random.words(20),
     ownerId,
     siteId
