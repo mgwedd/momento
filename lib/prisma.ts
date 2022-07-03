@@ -1,4 +1,3 @@
-// /lib/prisma.ts
 import { PrismaClient } from '@prisma/client';
 
 // PrismaClient is attached to the `global` object in development to prevent
@@ -15,5 +14,4 @@ if (process.env.NODE_ENV === 'production') {
   }
   prisma = global.prisma;
 }
-
 export default prisma;

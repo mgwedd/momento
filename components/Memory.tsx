@@ -6,8 +6,6 @@ export const Memory = (props: any) => {
     id, title, story, createdAt, updatedAt, owner = {}
   } = props;
 
-  console.log(' mem data', id, title, story, owner)
-
   return (
     <Flex
       bg="#edf3f8"

@@ -23,24 +23,18 @@ export const UserQuery = extendType({
       args: {
         id: nonNull(stringArg())
       },
-      async resolve(_, args, ctx) {
-        const user = await ctx.prisma.user.findUnique({
-          where: { id: args.id }
-        });
-        return user;
+      resolve(_, args, ctx) {
+        return ctx.prisma.user.findUnique({ where: { id: args.id } });
       }
     });
     t.field('users', {
       type: 'User',
-      description: 'A single user',
+      description: 'A list of users (WIP, currently unbounded)',
       args: {
         id: nonNull(stringArg())
       },
-      async resolve(_, args, ctx) {
-        const user = await ctx.prisma.user.findUnique({
-          where: { id: args.id }
-        });
-        return user;
+      resolve(_, args, ctx) {
+        return ctx.prisma.user.findMany();
       }
     });
     t.field('userConnection', {

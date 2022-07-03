@@ -79,7 +79,7 @@ type Query {
   """A relay-style connection to paginated users"""
   userConnection(after: String, first: Int!): UserConnectionResponse
 
-  """A single user"""
+  """A list of users (WIP, currently unbounded)"""
   users(id: String!): User
 }
 

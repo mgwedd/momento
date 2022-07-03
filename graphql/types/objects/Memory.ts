@@ -31,7 +31,7 @@ export const MemoryQuery = extendType({
       resolve: (_, args, ctx) => {
         return ctx.prisma.memory.findUnique({
           where: { id: args.id },
-          include: { owner: true } // todo make optional
+          include: { owner: true }
         });
       }
     });

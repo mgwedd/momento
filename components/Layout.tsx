@@ -153,7 +153,7 @@ export const Layout = (props) => {
             <InputLeftElement color="gray.500">
               <FiSearch />
             </InputLeftElement>
-            <Input placeholder="Search for articles..." />
+            <Input placeholder="Search Momento..." />
           </InputGroup>
 
           <Flex align="center">

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { db } from '../api/db';
+import db from '../lib/prisma';
 
 // WARNING — this script can add a decent amount of data to the db.
 // ensure that the createUsers count doesn't get too high

@@ -28,7 +28,6 @@ export default function HomeLayout() {
     // for testing apollo integration
     variables: { id: "62bb499b68ff89cc38305987" },
   });
-  console.log('home layout data', data, loading, error)
 
   if (!user) {
     return (
