@@ -1,7 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useUser } from '@auth0/nextjs-auth0';
-// import Link from 'next/link';
-import { SimpleGrid, Button } from '@chakra-ui/react'
+import { SimpleGrid, Button, useToast } from '@chakra-ui/react'
 
 import { Layout, Memory } from "../components";
 
@@ -45,6 +44,8 @@ export default function HomeLayout() {
 
   const { user } = useUser();
 
+  const toast = useToast();
+
   const {
     data,
     loading,
@@ -66,7 +67,15 @@ export default function HomeLayout() {
   }
 
 
-  if (error) return <p>Oh no... {error.message}</p>;
+  if (error) {
+    toast({
+      title: 'Error getting memories',
+      description: 'Something went wrong getting memories from Momento',
+      status: 'error',
+      duration: 9000,
+      isClosable: true
+    })
+  };
 
   const {
     edges,

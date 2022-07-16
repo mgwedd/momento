@@ -73,6 +73,7 @@ const SidebarContent = (props: any) => (
       aria-label="Main Navigation"
     >
       <NavItem icon={MdHome}>Home</NavItem>
+      <NavItem icon={HiCode}>Momentos</NavItem>
       <NavItem icon={FaRss}>Memories</NavItem>
       <NavItem icon={HiCollection}>Reflections</NavItem>
       {/* <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
