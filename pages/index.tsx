@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useUser } from '@auth0/nextjs-auth0';
 // import Link from 'next/link';
+import { SimpleGrid, Button } from '@chakra-ui/react'
 
 import { Layout, Memory } from "../components";
 
@@ -76,6 +77,7 @@ export default function HomeLayout() {
 
   return (
     <Layout>
+      <SimpleGrid minChildWidth='325px' spacing='20px'>
       {edges?.map( ({ node }) => {
         return (
           <Memory
@@ -89,17 +91,19 @@ export default function HomeLayout() {
           />
         )
       } )}
+      </SimpleGrid>
       {hasNextPage ? (
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded my-10"
+        <Button
+          bg="green"
+          color="white"
             onClick={() => {
               fetchMore({
                 variables: { after: endCursor },
               });
             }}
           >
-            More Memories
-          </button>
+            Load More Memories
+          </Button>
         ) : (
           <p className="my-10 text-center font-medium">
             You've reached the end!
