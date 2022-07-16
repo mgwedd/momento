@@ -6,7 +6,7 @@ import { Layout, Memory } from "../components";
 
 
 const FETCH_MEMORY_QUERY = gql`
-  query memory( $id: String! ) {
+  query memoryQuery( $id: String! ) {
       memory( id: $id ) {
         id
         title
@@ -18,15 +18,37 @@ const FETCH_MEMORY_QUERY = gql`
   }
 `;
 
+const MEMORY_CONNECTION_QUERY = gql`
+  query memoryConnectionQuery($first: Int, $after: String) {
+    memoryConnection(first: $first, after: $after) {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      edges {
+        cursor
+        node {
+          id
+          title
+          story
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }
+    }
+  }
+`;
+
 export default function HomeLayout() {
 
   const { user } = useUser();
   console.log('user', user )
-  const { data, loading, error } = useQuery(FETCH_MEMORY_QUERY, {
+  const { data, loading, error } = useQuery(MEMORY_CONNECTION_QUERY, {
     // TODO this is a static memory fetch example
     // that wouldn't work if the mem were deleted
     // for testing apollo integration
-    variables: { id: "62bb499b68ff89cc38305987" },
+    variables: { first: 10 },
   });
 
   if (!user) {
@@ -43,19 +65,27 @@ export default function HomeLayout() {
 
   if (error) return <p>Oh no... {error.message}</p>;
 
-  const { id, title, story, createdAt, updatedAt, owner } = data?.memory ?? {};
+  const {
+    edges,
+    pageInfo: { endCursor, hasNextPage}
+  } = data?.memoryConnection ?? {};
 
   return (
     <Layout>
-      <Memory
-        key={id}
-        title={title}
-        id={id}
-        story={story}
-        createdAt={createdAt}
-        updatedAt={updatedAt}
-        owner={owner}
-      />
+      {edges.map( ({ node }) => {
+        return (
+          <Memory
+            key={node.id}
+            title={node.title}
+            id={node.id}
+            story={node.story}
+            createdAt={node.createdAt}
+            updatedAt={node.updatedAt}
+            owner={node.owner}
+          />
+        )
+      } )}
+      {hasNextPage && <div>Load more memories? pagination WIP</div>}
     </Layout>
   )
 }
