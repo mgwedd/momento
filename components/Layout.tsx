@@ -1,4 +1,4 @@
-import { useDisclosure, Flex,  Text, Icon, IconButton, Box, Input, InputGroup, InputLeftElement, Drawer, Avatar, DrawerContent,  DrawerOverlay, ChakraProps, OmitCommonProps } from "@chakra-ui/react";
+import { useDisclosure, Flex,  Text, Button, Icon, IconButton, Box, Input, InputGroup, InputLeftElement, Drawer, Avatar, DrawerContent,  DrawerOverlay, ChakraProps, OmitCommonProps, useToast } from "@chakra-ui/react";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
@@ -6,6 +6,7 @@ import { FiMenu, FiSearch } from "react-icons/fi";
 import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
 import { Logo } from "@choc-ui/logo";
+import { useUser } from "@auth0/nextjs-auth0";
 
 const NavItem = (props: any) => {
   const { icon, children, ...rest } = props;
@@ -80,12 +81,28 @@ const SidebarContent = (props: any) => (
       <NavItem icon={HiCode}>Integrations</NavItem>
       <NavItem icon={AiFillGift}>Changelog</NavItem>
       <NavItem icon={BsGearFill}>Settings</NavItem>  */}
+      {/* Fix lazy logout button styles */}
+      <Button as="a" marginLeft="20px" marginRight="20px" href="/api/auth/logout">Logout</Button>
     </Flex>
   </Box>
 );
 
 export const Layout = (props) => {
   const sidebar = useDisclosure();
+  const { user, error } = useUser()
+
+  const toast = useToast();
+
+  if (error) {
+    toast({
+      title: 'Error getting user profile',
+      description: 'Something went wrong getting your profile from Momento',
+      status: 'error',
+      duration: 9000,
+      isClosable: true
+    })
+  };
+
 
   return (
     <Box
@@ -161,8 +178,8 @@ export const Layout = (props) => {
             <Avatar
               ml="4"
               size="sm"
-              name="anubra266"
-              src="https://avatars.githubusercontent.com/u/30869823?v=4"
+              name={user.name}
+              src={user.picture}
               cursor="pointer"
             />
           </Flex>

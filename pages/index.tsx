@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { SimpleGrid, Button, useToast } from '@chakra-ui/react'
 
 import { Layout, Memory } from "../components";
@@ -121,3 +121,5 @@ export default function HomeLayout() {
     </Layout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired();
