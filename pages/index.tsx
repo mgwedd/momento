@@ -5,18 +5,18 @@ import { useUser } from '@auth0/nextjs-auth0';
 import { Layout, Memory } from "../components";
 
 
-const FETCH_MEMORY_QUERY = gql`
-  query memoryQuery( $id: String! ) {
-      memory( id: $id ) {
-        id
-        title
-        story
-        createdAt
-        updatedAt
-        owner { firstName, lastName, email }
-      }
-  }
-`;
+// const FETCH_MEMORY_QUERY = gql`
+//   query memoryQuery( $id: String! ) {
+//       memory( id: $id ) {
+//         id
+//         title
+//         story
+//         createdAt
+//         updatedAt
+//         owner { firstName, lastName, email }
+//       }
+//   }
+// `;
 
 const MEMORY_CONNECTION_QUERY = gql`
   query memoryConnectionQuery($first: Int, $after: String) {
@@ -43,11 +43,13 @@ const MEMORY_CONNECTION_QUERY = gql`
 export default function HomeLayout() {
 
   const { user } = useUser();
-  console.log('user', user )
-  const { data, loading, error } = useQuery(MEMORY_CONNECTION_QUERY, {
-    // TODO this is a static memory fetch example
-    // that wouldn't work if the mem were deleted
-    // for testing apollo integration
+
+  const {
+    data,
+    loading,
+    error,
+    fetchMore
+  } = useQuery(MEMORY_CONNECTION_QUERY, {
     variables: { first: 10 },
   });
 
@@ -67,12 +69,14 @@ export default function HomeLayout() {
 
   const {
     edges,
-    pageInfo: { endCursor, hasNextPage}
+    pageInfo
   } = data?.memoryConnection ?? {};
+
+  const { endCursor, hasNextPage } = pageInfo ?? {};
 
   return (
     <Layout>
-      {edges.map( ({ node }) => {
+      {edges?.map( ({ node }) => {
         return (
           <Memory
             key={node.id}
@@ -85,7 +89,22 @@ export default function HomeLayout() {
           />
         )
       } )}
-      {hasNextPage && <div>Load more memories? pagination WIP</div>}
+      {hasNextPage ? (
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded my-10"
+            onClick={() => {
+              fetchMore({
+                variables: { after: endCursor },
+              });
+            }}
+          >
+            More Memories
+          </button>
+        ) : (
+          <p className="my-10 text-center font-medium">
+            You've reached the end!
+          </p>
+        )}
     </Layout>
   )
 }

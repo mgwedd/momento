@@ -12,7 +12,7 @@ export const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          memories: relayStylePagination()
+          memoryConnection: relayStylePagination()
         }
       }
     }

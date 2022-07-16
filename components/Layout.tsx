@@ -62,7 +62,7 @@ const SidebarContent = (props: any) => (
     <Flex px="4" py="5" align="center">
       <Logo />
       <Text fontSize="2xl" ml="2" color="white" fontWeight="semibold">
-        Choc UI
+        Momento
       </Text>
     </Flex>
     <Flex
@@ -73,12 +73,12 @@ const SidebarContent = (props: any) => (
       aria-label="Main Navigation"
     >
       <NavItem icon={MdHome}>Home</NavItem>
-      <NavItem icon={FaRss}>Articles</NavItem>
-      <NavItem icon={HiCollection}>Collections</NavItem>
-      <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
+      <NavItem icon={FaRss}>Memories</NavItem>
+      <NavItem icon={HiCollection}>Reflections</NavItem>
+      {/* <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
       <NavItem icon={HiCode}>Integrations</NavItem>
       <NavItem icon={AiFillGift}>Changelog</NavItem>
-      <NavItem icon={BsGearFill}>Settings</NavItem>
+      <NavItem icon={BsGearFill}>Settings</NavItem>  */}
     </Flex>
   </Box>
 );
@@ -86,7 +86,6 @@ const SidebarContent = (props: any) => (
 export const Layout = (props) => {
   const sidebar = useDisclosure();
 
-  const { memories } = props;
   return (
     <Box
       as="section"
