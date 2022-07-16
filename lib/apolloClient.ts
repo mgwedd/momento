@@ -7,7 +7,7 @@ export const client = new ApolloClient({
   // this causes a silent failure that is very annoying
   //  where the apollo client does nothing
   // FOr now, stick to the hardcoded string
-  uri: 'http://localhost:3000/api/graphql',
+  uri: process.env.GRAPHQL_SERVER_URI ?? 'http://localhost:3000/api/graphql',
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
