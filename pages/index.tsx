@@ -21,7 +21,7 @@ const FETCH_MEMORY_QUERY = gql`
 export default function HomeLayout() {
 
   const { user } = useUser();
-
+  console.log('user', user )
   const { data, loading, error } = useQuery(FETCH_MEMORY_QUERY, {
     // TODO this is a static memory fetch example
     // that wouldn't work if the mem were deleted

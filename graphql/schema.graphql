@@ -65,22 +65,19 @@ type Query {
   memory(id: String!): Memory
 
   """A relay-style connection to paginated memories"""
-  memoryConnection(after: String, first: Int!): MemoryConnectionResponse
+  memoryConnection(after: String, first: Int): MemoryConnectionResponse
 
   """A single site"""
   site(id: String!): Site
 
   """A relay-style connection to paginated sites"""
-  siteConnection(after: String, first: Int!): SiteConnectionResponse
+  siteConnection(after: String, first: Int): SiteConnectionResponse
 
   """A single user"""
   user(id: String!): User
 
   """A relay-style connection to paginated users"""
-  userConnection(after: String, first: Int!): UserConnectionResponse
-
-  """A list of users (WIP, currently unbounded)"""
-  users(id: String!): User
+  userConnection(after: String, first: Int): UserConnectionResponse
 }
 
 """Represents a momento site for grieving someone or something"""

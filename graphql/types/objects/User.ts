@@ -1,4 +1,7 @@
 import { objectType, extendType, stringArg, nonNull, intArg } from 'nexus';
+import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
+
+const MAX_PAGE_SIZE = 1000;
 
 export const User = objectType({
   name: 'User',
@@ -27,83 +30,37 @@ export const UserQuery = extendType({
         return ctx.prisma.user.findUnique({ where: { id: args.id } });
       }
     });
-    t.field('users', {
-      type: 'User',
-      description: 'A list of users (WIP, currently unbounded)',
-      args: {
-        id: nonNull(stringArg())
-      },
-      resolve(_, args, ctx) {
-        return ctx.prisma.user.findMany();
-      }
-    });
     t.field('userConnection', {
       type: 'UserConnectionResponse',
       description: 'A relay-style connection to paginated users',
       args: {
-        first: nonNull(intArg()),
+        first: intArg(),
         after: stringArg()
       },
-      async resolve(_, args, ctx) {
-        let queryResults = [];
-        if (args.after) {
-          // check if there is a cursor as the argument
-          queryResults = await ctx.prisma.user.findMany({
-            take: args.first, // the number of items to return from the db
-            skip: 1, // skip the cursor itself
-            cursor: {
-              id: args.after // the cursor
-            }
-          });
-        } else {
-          // if no cursor, this means that this is the first request
-          // we wil return the first items in the db
-          queryResults = await ctx.prisma.user.findMany({
-            take: args.first
-          });
+      async resolve(_, { first, after }, ctx) {
+        if (first > MAX_PAGE_SIZE) {
+          throw new Error(
+            `"first" argument specifies a page size that exceeds the maximum: ${MAX_PAGE_SIZE}`
+          );
         }
 
-        if (queryResults.length < 1) {
-          // no results found
-          return {
-            edges: [],
-            pageInfo: {
-              endCursor: null,
-              hasNextPage: false
-            }
-          };
-        }
+        const offset = after ? cursorToOffset(after) + 1 : 0;
 
-        // the query has returned memories
-        // so figure out the page info (more pages?) and return results
+        if (isNaN(offset)) throw new Error('cursor is invalid');
 
-        // get the last element in the previous result set
-        const lastUserResults = queryResults[queryResults.length - 1];
-        // cursor we'll return in subsequent requests
-        const { id: newCursor } = lastUserResults || {};
-        // query after the cursor to check if we have a next page of results
-        const secondQueryResults = await ctx.prisma.user.findMany({
-          take: args.first,
-          cursor: {
-            id: newCursor
-          }
-        });
+        const [totalCount, items] = await Promise.all([
+          ctx.prisma.site.count(),
+          ctx.prisma.site.findMany({
+            take: first,
+            skip: offset
+          })
+        ]);
 
-        // return the response of the initial query
-        const result = {
-          pageInfo: {
-            endCursor: newCursor,
-            // we have a next page if the number of items
-            // is greater than the response of the second query
-            hasNextPage: secondQueryResults.length > args.first
-          },
-          edges: queryResults.map((memory: { id: string }) => ({
-            cursor: memory.id,
-            node: memory
-          }))
-        };
-
-        return result;
+        return connectionFromArraySlice(
+          items,
+          { first, after },
+          { sliceStart: offset, arrayLength: totalCount }
+        );
       }
     });
   }
