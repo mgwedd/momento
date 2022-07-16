@@ -115,7 +115,7 @@ export default function HomeLayout() {
           </Button>
         ) : (
           <p className="my-10 text-center font-medium">
-            You've reached the end!
+            You&apos;ve reached the end!
           </p>
         )}
     </Layout>
